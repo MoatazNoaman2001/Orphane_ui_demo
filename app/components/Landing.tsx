@@ -1,154 +1,13 @@
 "use client";
 
-import {
-  useEffect,
-  useRef,
-  useState,
-  useSyncExternalStore,
-  type MouseEvent,
-  type ReactNode,
-} from "react";
+import { useEffect, useState, ViewTransition } from "react";
+import Link from "next/link";
 import DotGlobe from "./DotGlobe";
 import WorldDotMap from "./WorldDotMap";
-import { content, type Lang } from "../content";
-
-/* ---------- scroll reveal ---------- */
-function Reveal({
-  children,
-  className = "",
-  delay = 0,
-}: {
-  children: ReactNode;
-  className?: string;
-  delay?: number;
-}) {
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          el.classList.add("is-in");
-          io.disconnect();
-        }
-      },
-      { threshold: 0.15 }
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-  return (
-    <div ref={ref} className={`reveal ${className}`} style={{ transitionDelay: `${delay}ms` }}>
-      {children}
-    </div>
-  );
-}
-
-/* ---------- scramble-in value (data "decrypting") ---------- */
-function Scramble({ value }: { value: string }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    let raf = 0;
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        io.disconnect();
-        const chars = "0123456789ABCDE%–#";
-        const start = performance.now();
-        const dur = 1000;
-        const tick = (now: number) => {
-          const p = Math.min((now - start) / dur, 1);
-          const settled = Math.floor(p * value.length);
-          el.textContent =
-            value.slice(0, settled) +
-            Array.from(
-              { length: value.length - settled },
-              () => chars[Math.floor(Math.random() * chars.length)]
-            ).join("");
-          if (p < 1) raf = requestAnimationFrame(tick);
-          else el.textContent = value;
-        };
-        raf = requestAnimationFrame(tick);
-      },
-      { threshold: 0.6 }
-    );
-    io.observe(el);
-    return () => {
-      io.disconnect();
-      cancelAnimationFrame(raf);
-    };
-  }, [value]);
-  return <span ref={ref}>{value}</span>;
-}
-
-/* ---------- cursor spotlight wrapper ---------- */
-function SpotCard({ children, className = "" }: { children: ReactNode; className?: string }) {
-  const onMove = (e: MouseEvent<HTMLDivElement>) => {
-    const r = e.currentTarget.getBoundingClientRect();
-    e.currentTarget.style.setProperty("--mx", `${e.clientX - r.left}px`);
-    e.currentTarget.style.setProperty("--my", `${e.clientY - r.top}px`);
-  };
-  return (
-    <div className={`spot ${className}`} onMouseMove={onMove}>
-      {children}
-    </div>
-  );
-}
-
-/* ---------- scroll progress bar ---------- */
-function ScrollProgress() {
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const onScroll = () => {
-      const el = ref.current;
-      if (!el) return;
-      const h = document.documentElement;
-      const p = h.scrollTop / (h.scrollHeight - h.clientHeight || 1);
-      el.style.transform = `scaleX(${p})`;
-    };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-  return (
-    <div
-      ref={ref}
-      className="fixed inset-x-0 top-0 z-[60] h-[2.5px] origin-left bg-gradient-to-r from-accent via-[#4f9de8] to-brand rtl:origin-right"
-      style={{ transform: "scaleX(0)" }}
-    />
-  );
-}
-
-/* ---------- brand mark ---------- */
-function Mark({ size = 34 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 40 40" fill="none" aria-hidden="true">
-      <circle cx="20" cy="20" r="17" stroke="#1c4791" strokeWidth="2.5" />
-      <circle cx="20" cy="20" r="10.5" stroke="#1fc2f2" strokeWidth="2" strokeDasharray="4 5" />
-      <circle cx="20" cy="20" r="4" fill="#1fc2f2" />
-      <circle cx="31.5" cy="11" r="2.6" fill="#1c4791" stroke="#1fc2f2" strokeWidth="1.4" />
-    </svg>
-  );
-}
-
-const GRADE_COLORS: Record<string, string> = {
-  A: "#1fc2f2",
-  B: "#4f9de8",
-  C: "#8b9dc9",
-  D: "#d1a75a",
-  E: "#e0766a",
-};
-
-const TONE_COLORS: Record<string, string> = {
-  ok: "#1fc2f2",
-  warn: "#d1a75a",
-  gap: "#e0766a",
-  info: "#4f9de8",
-};
+import SiteNav, { Mark } from "./SiteNav";
+import { GRADE_COLORS, Reveal, Scramble, SpotCard, TONE_COLORS, tint } from "./motion";
+import { useLang, useTheme } from "./prefs";
+import { content } from "../content";
 
 /* ---------- feature icons ---------- */
 function FeatureIcon({ i }: { i: number }) {
@@ -168,38 +27,14 @@ function FeatureIcon({ i }: { i: number }) {
 }
 
 export default function Landing() {
-  const [lang, setLang] = useState<Lang>("en");
+  const { lang } = useLang();
+  const { theme } = useTheme();
   const t = content[lang];
 
-  // The inline script in layout.tsx resolves the theme before first paint and stamps
-  // it on <html data-theme>; the DOM attribute is the single source of truth here.
-  const theme = useSyncExternalStore(
-    (onChange) => {
-      const mo = new MutationObserver(onChange);
-      mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
-      return () => mo.disconnect();
-    },
-    () => (document.documentElement.dataset.theme === "light" ? "light" : "dark"),
-    () => "dark" as const
-  );
-
-  const toggleTheme = () => {
-    const next = theme === "dark" ? "light" : "dark";
-    document.documentElement.dataset.theme = next;
-    try {
-      localStorage.setItem("odo-theme", next);
-    } catch {}
-  };
-
-  const [chips, setChips] = useState({ source: true, year: true, grade: true });
+  const [chips, setChips] = useState({ source: false, year: false, grade: false });
   const valid = chips.source && chips.year && chips.grade;
   const [activeGrade, setActiveGrade] = useState("B");
   const [step, setStep] = useState(0);
-
-  useEffect(() => {
-    document.documentElement.lang = lang;
-    document.documentElement.dir = t.dir;
-  }, [lang, t.dir]);
 
   useEffect(() => {
     const id = setInterval(() => setStep((s) => (s + 1) % (t.pipeline.steps.length + 2)), 1500);
@@ -209,61 +44,28 @@ export default function Landing() {
   const toggleChip = (k: keyof typeof chips) => setChips((c) => ({ ...c, [k]: !c[k] }));
 
   return (
+    <ViewTransition
+      enter={{ "nav-forward": "nav-forward", "nav-back": "nav-back", default: "none" }}
+      exit={{ "nav-forward": "nav-forward", "nav-back": "nav-back", default: "none" }}
+      default="none"
+    >
     <div className="relative isolate min-h-screen bg-ink-950 text-foreground">
       <div className="page-atmosphere pointer-events-none absolute inset-0 -z-10" aria-hidden="true" />
-      <ScrollProgress />
       <div className="noise" aria-hidden="true" />
 
       {/* ================= NAV ================= */}
-      <header className="fixed inset-x-0 top-0 z-50 border-b border-line bg-ink-950/75 backdrop-blur-md">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
-          <a href="#top" className="flex items-center gap-3">
-            <Mark />
-            <div className="leading-tight">
-              <div className="text-sm font-semibold tracking-wide">{t.hero.kicker}</div>
-              <div className="latin font-mono text-[10px] uppercase tracking-[0.2em] text-accent/70">
-                OCF · {t.hero.firstRelease}
-              </div>
-            </div>
-          </a>
-          <nav className="hidden items-center gap-7 text-sm text-foreground/70 md:flex">
-            <a href="#rule" className="transition hover:text-accent">{t.nav.rule}</a>
-            <a href="#pipeline" className="transition hover:text-accent">{t.nav.pipeline}</a>
-            <a href="#countries" className="transition hover:text-accent">{t.nav.countries}</a>
-            <a href="#platform" className="transition hover:text-accent">{t.nav.platform}</a>
-          </nav>
-          <div className="flex items-center gap-3">
-            <button
-              onClick={toggleTheme}
-              aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
-              className="flex h-8 w-8 items-center justify-center rounded-full border border-line text-foreground/70 transition hover:border-accent/50 hover:text-accent"
-            >
-              {theme === "dark" ? (
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="4.5" />
-                  <path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8" />
-                </svg>
-              ) : (
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z" />
-                </svg>
-              )}
-            </button>
-            <button
-              onClick={() => setLang(lang === "en" ? "ar" : "en")}
-              className="latin rounded-full border border-accent/40 px-4 py-1.5 font-mono text-xs font-medium text-accent transition hover:bg-accent/10 hover:shadow-[0_0_16px_rgba(31,194,242,0.3)]"
-            >
-              {t.switchTo}
-            </button>
-            <a
-              href="#cta"
-              className="hidden rounded-full bg-gradient-to-r from-brand to-[#2a63c4] px-4 py-1.5 text-xs font-semibold text-white transition hover:brightness-125 sm:block"
-            >
-              {t.nav.cta}
-            </a>
-          </div>
-        </div>
-      </header>
+      <SiteNav
+        title={t.hero.kicker}
+        subtitle={`OCF · ${t.hero.firstRelease}`}
+        homeHref="#top"
+        links={[
+          { href: "#rule", label: t.nav.rule },
+          { href: "#pipeline", label: t.nav.pipeline },
+          { href: "#countries", label: t.nav.countries },
+          { href: "#platform", label: t.nav.platform },
+        ]}
+        cta={{ href: "#cta", label: t.nav.cta }}
+      />
 
       {/* ================= HERO ================= */}
       <section id="top" className="relative overflow-hidden pt-16">
@@ -394,7 +196,7 @@ export default function Landing() {
           <Reveal delay={100}>
             <SpotCard
               className={`relative rounded-2xl border bg-ink-900/70 p-7 backdrop-blur-sm transition-colors duration-500 ${
-                valid ? "border-accent/30 shadow-[0_0_50px_rgba(28,71,145,0.25)]" : "border-danger/50 shadow-[0_0_50px_rgba(224,118,106,0.12)]"
+                valid ? "border-accent/30 shadow-[0_0_50px_rgba(28,71,145,0.25)]" : "border-line"
               }`}
             >
               <div className="latin flex items-center justify-between font-mono text-[11px] tracking-[0.22em] text-foreground/45">
@@ -420,13 +222,15 @@ export default function Landing() {
                     className={`group rounded-lg border px-4 py-2.5 text-start transition ${
                       chips[k]
                         ? "border-accent/35 bg-accent/5 hover:border-accent/70"
-                        : "border-dashed border-danger/50 bg-transparent opacity-50 hover:opacity-80"
+                        : "border-dashed border-accent/40 bg-transparent opacity-70 hover:opacity-100 hover:border-accent/70"
                     }`}
                   >
                     <div className="latin font-mono text-[10px] tracking-[0.2em] text-accent/70">{t.rule.chips[k]}</div>
-                    <div className={`mt-0.5 text-sm font-medium ${chips[k] ? "text-foreground" : "text-danger/70 line-through"}`}>
-                      {k === "grade" ? (
-                        <span className="latin font-mono" style={{ color: chips[k] ? GRADE_COLORS[t.rule.chipValues.grade] : undefined }}>
+                    <div className={`mt-0.5 text-sm font-medium ${chips[k] ? "text-foreground" : "text-accent/60"}`}>
+                      {!chips[k] ? (
+                        <span className="latin font-mono">+</span>
+                      ) : k === "grade" ? (
+                        <span className="latin font-mono" style={{ color: GRADE_COLORS[t.rule.chipValues.grade] }}>
                           {t.rule.chipValues.grade}
                         </span>
                       ) : (
@@ -439,10 +243,10 @@ export default function Landing() {
 
               <div
                 className={`mt-7 flex items-center gap-2.5 rounded-lg px-4 py-3 text-sm font-medium transition-colors duration-500 ${
-                  valid ? "bg-accent/10 text-accent" : "bg-danger/10 text-danger"
+                  valid ? "bg-accent/10 text-accent" : "bg-warn/10 text-warn"
                 }`}
               >
-                <span className={`h-2 w-2 rounded-full ${valid ? "bg-accent" : "bg-danger"}`} />
+                <span className={`h-2 w-2 rounded-full ${valid ? "bg-accent" : "bg-warn"}`} />
                 {valid ? t.rule.statusOk : t.rule.statusBad}
               </div>
               <div className="mt-4 text-xs text-foreground/40">{t.rule.hint}</div>
@@ -466,11 +270,11 @@ export default function Landing() {
                       className={`flex w-full items-center gap-4 rounded-xl border px-4 py-3 text-start transition-all duration-300 ${
                         active ? "border-transparent bg-ink-800" : "border-line bg-transparent opacity-60 hover:opacity-100"
                       }`}
-                      style={active ? { boxShadow: `inset 3px 0 0 ${GRADE_COLORS[g]}, 0 0 24px ${GRADE_COLORS[g]}22` } : undefined}
+                      style={active ? { boxShadow: `inset 3px 0 0 ${GRADE_COLORS[g]}, 0 0 24px ${tint(GRADE_COLORS[g], 13)}` } : undefined}
                     >
                       <span
                         className="latin flex h-9 w-9 shrink-0 items-center justify-center rounded-lg font-mono text-base font-bold"
-                        style={{ background: `${GRADE_COLORS[g]}1a`, color: GRADE_COLORS[g], border: `1px solid ${GRADE_COLORS[g]}55` }}
+                        style={{ background: tint(GRADE_COLORS[g], 10), color: GRADE_COLORS[g], border: `1px solid ${tint(GRADE_COLORS[g], 33)}` }}
                       >
                         {g}
                       </span>
@@ -503,9 +307,9 @@ export default function Landing() {
                     <div key={i} className="relative flex-1">
                       {i > 0 && (
                         <div className="absolute top-[15px] h-px w-full -translate-x-1/2 rtl:translate-x-1/2">
-                          <div className="h-full w-full bg-line" />
+                          <div className="h-full w-full bg-foreground/15" />
                           <div
-                            className="absolute inset-0 origin-left bg-gradient-to-r from-accent to-[#4f9de8] transition-transform duration-700 rtl:origin-right"
+                            className="absolute inset-0 origin-left bg-accent transition-transform duration-700 rtl:origin-right"
                             style={{ transform: `scaleX(${i <= step ? 1 : 0})` }}
                           />
                         </div>
@@ -514,11 +318,12 @@ export default function Landing() {
                         <div
                           className={`relative z-10 flex h-8 w-8 items-center justify-center rounded-full border transition-all duration-500 ${
                             state === "done"
-                              ? "border-accent bg-accent text-[#052038]"
+                              ? "border-accent bg-accent text-background"
                               : state === "active"
-                              ? "border-accent bg-ink-950 text-accent shadow-[0_0_18px_rgba(31,194,242,0.5)]"
-                              : "border-line bg-ink-950 text-foreground/30"
+                              ? "border-accent bg-ink-950 font-semibold text-accent"
+                              : "border-foreground/25 bg-ink-950 text-foreground/40"
                           }`}
+                          style={state === "active" ? { boxShadow: "0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent)" } : undefined}
                         >
                           {state === "done" ? (
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
@@ -526,9 +331,6 @@ export default function Landing() {
                             </svg>
                           ) : (
                             <span className="latin font-mono text-[11px]">{i + 1}</span>
-                          )}
-                          {state === "active" && (
-                            <span className="ping-soft absolute inline-flex h-full w-full rounded-full bg-accent/40" />
                           )}
                         </div>
                         <div className={`mt-3 px-2 text-xs font-medium leading-snug transition-colors duration-500 ${state === "todo" ? "text-foreground/35" : "text-foreground/85"}`}>
@@ -545,11 +347,23 @@ export default function Landing() {
                 })}
               </div>
             </div>
-            <div className="mt-6 flex items-center gap-2.5 text-xs text-warn/90">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 3l7 3v6c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6l7-3Z" />
-              </svg>
-              {t.pipeline.gate}
+            <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
+              <div className="flex items-center gap-2.5 text-xs text-warn/90">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 3l7 3v6c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6l7-3Z" />
+                </svg>
+                {t.pipeline.gate}
+              </div>
+              <Link
+                href="/designs/observatory/review"
+                transitionTypes={["nav-forward"]}
+                className="group inline-flex items-center gap-2 rounded-full border border-line bg-ink-900/40 px-5 py-2 text-xs font-medium text-foreground/75 transition duration-300 hover:border-accent/50 hover:text-accent"
+              >
+                {t.pipeline.cta}
+                <svg className="transition-transform duration-300 group-hover:translate-x-0.5 rtl:rotate-180 rtl:group-hover:-translate-x-0.5" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M5 12h14m-6-6 6 6-6 6" />
+                </svg>
+              </Link>
             </div>
           </Reveal>
         </div>
@@ -574,14 +388,14 @@ export default function Landing() {
 
         <div className="mx-auto mt-16 grid max-w-6xl gap-5 px-5 sm:grid-cols-2 lg:grid-cols-4">
           {t.countries.states.map((st, i) => {
-            const colors = ["#1fc2f2", "#4f9de8", "#d1a75a", "#8b9dc9"];
+            const colors = ["var(--state-pub)", "var(--state-prep)", "var(--state-gap)", "var(--state-internal)"];
             const c = colors[i];
             return (
               <Reveal key={i} delay={i * 100} className="h-full">
                 <SpotCard className="group h-full rounded-2xl border border-line bg-ink-900/50 p-6 backdrop-blur-sm transition duration-300 hover:-translate-y-1.5 hover:border-accent/40 hover:shadow-[0_10px_40px_rgba(28,71,145,0.35)]">
                   <div
                     className="latin inline-block rounded px-2 py-1 font-mono text-[10px] font-semibold tracking-[0.18em]"
-                    style={{ background: `${c}1a`, color: c, border: `1px solid ${c}44` }}
+                    style={{ background: tint(c, 10), color: c, border: `1px solid ${tint(c, 27)}` }}
                   >
                     {st.tag}
                   </div>
@@ -598,6 +412,31 @@ export default function Landing() {
             <span className="shimmer-text">{t.countries.gapNote}</span>
           </p>
         </Reveal>
+
+        <Reveal delay={260}>
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+            <Link
+              href="/designs/observatory/countries"
+              transitionTypes={["nav-forward"]}
+              className="group inline-flex items-center gap-2.5 rounded-full border border-accent/40 bg-ink-900/40 px-7 py-3 text-sm font-semibold text-accent backdrop-blur-sm transition duration-300 hover:-translate-y-0.5 hover:bg-accent/10 hover:shadow-[0_0_32px_rgba(31,194,242,0.35)]"
+            >
+              {t.countries.ctaList}
+              <svg className="transition-transform duration-300 group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14m-6-6 6 6-6 6" />
+              </svg>
+            </Link>
+            <Link
+              href="/designs/observatory/country"
+              transitionTypes={["nav-forward"]}
+              className="group inline-flex items-center gap-2.5 rounded-full border border-line bg-ink-900/40 px-7 py-3 text-sm font-medium text-foreground/75 backdrop-blur-sm transition duration-300 hover:-translate-y-0.5 hover:border-accent/50 hover:text-accent"
+            >
+              {t.countries.cta}
+              <svg className="transition-transform duration-300 group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14m-6-6 6 6-6 6" />
+              </svg>
+            </Link>
+          </div>
+        </Reveal>
       </section>
 
       {/* ================= §04 PLATFORM ================= */}
@@ -610,17 +449,47 @@ export default function Landing() {
           </Reveal>
 
           <div className="mt-12 grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
-            {t.platform.features.map((f, i) => (
-              <Reveal key={i} delay={i * 70} className="h-full">
+            {t.platform.features.map((f, i) => {
+              const href =
+                i === 0 ? "/designs/observatory/countries" : i === 1 ? "/designs/observatory/indicators" : undefined;
+              const card = (
                 <SpotCard className="group h-full bg-ink-900 p-7 transition-colors duration-300 hover:bg-ink-850">
-                  <div className="inline-flex rounded-xl border border-accent/20 bg-accent/5 p-2.5 text-accent/80 transition duration-300 group-hover:border-accent/50 group-hover:text-accent group-hover:shadow-[0_0_20px_rgba(31,194,242,0.25)]">
-                    <FeatureIcon i={i} />
+                  <div className="flex items-start justify-between">
+                    <div className="inline-flex rounded-xl border border-accent/20 bg-accent/5 p-2.5 text-accent/80 transition duration-300 group-hover:border-accent/50 group-hover:text-accent group-hover:shadow-[0_0_20px_rgba(31,194,242,0.25)]">
+                      <FeatureIcon i={i} />
+                    </div>
+                    {href && (
+                      <svg
+                        className="mt-1 text-foreground/30 transition-colors duration-300 group-hover:text-accent rtl:rotate-180"
+                        width="15"
+                        height="15"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M7 17 17 7M9 7h8v8" />
+                      </svg>
+                    )}
                   </div>
                   <div className="mt-4 font-semibold">{f.name}</div>
                   <p className="mt-2 text-sm leading-relaxed text-foreground/55">{f.desc}</p>
                 </SpotCard>
-              </Reveal>
-            ))}
+              );
+              return (
+                <Reveal key={i} delay={i * 70} className="h-full">
+                  {href ? (
+                    <Link href={href} transitionTypes={["nav-forward"]} className="block h-full">
+                      {card}
+                    </Link>
+                  ) : (
+                    card
+                  )}
+                </Reveal>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -683,5 +552,6 @@ export default function Landing() {
         </div>
       </footer>
     </div>
+    </ViewTransition>
   );
 }

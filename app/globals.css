@@ -17,6 +17,17 @@
 
   --background: var(--ink-950);
   --foreground: #e6eefc;
+
+  /* semantic data colors — grades and page states, theme-aware */
+  --grade-a: #1fc2f2;
+  --grade-b: #4f9de8;
+  --grade-c: #8b9dc9;
+  --grade-d: #d1a75a;
+  --grade-e: #e0766a;
+  --state-pub: #1fc2f2;
+  --state-prep: #4f9de8;
+  --state-gap: #e3a63b;
+  --state-internal: #8b9dc9;
 }
 
 html[data-theme="light"] {
@@ -29,11 +40,32 @@ html[data-theme="light"] {
   --line-soft: rgba(28, 71, 145, 0.07);
 
   --danger: #d3302f;
-  --warn: #a16207;
+  --warn: #8a5a06;
 
+  --accent: #0d76ab;
   --foreground: #0a1a38;
+
+  --grade-a: #0b7fb3;
+  --grade-b: #2a63c4;
+  --grade-c: #56698f;
+  --grade-d: #91650e;
+  --grade-e: #bb4a38;
+  --state-pub: #0b7fb3;
+  --state-prep: #2a63c4;
+  --state-gap: #91650e;
+  --state-internal: #56698f;
+
   color-scheme: light;
   scrollbar-color: rgba(28, 71, 145, 0.35) var(--ink-950);
+}
+
+/* Light mode reads as ONE solid ink for secondary text — no washed-out grays.
+   (Dark mode keeps its opacity hierarchy; on light it kills readability.) */
+html[data-theme="light"] [class*="text-foreground/"] {
+  color: #33486e;
+}
+html[data-theme="light"] [class*="text-accent/"] {
+  color: var(--accent);
 }
 
 @theme inline {
@@ -74,6 +106,22 @@ html[lang="ar"] body {
 
 html[lang="ar"] .latin {
   font-family: var(--font-geist-mono), monospace;
+}
+
+/* Arabic legibility: IBM Plex Sans Arabic reads well large but shrinks poorly —
+   small utility sizes get a bump + taller line height in Arabic only.
+   (.latin labels keep Geist Mono and are unaffected.) */
+html[lang="ar"] .text-xs {
+  font-size: 0.8125rem; /* 13px, was 12px */
+  line-height: 1.65;
+}
+html[lang="ar"] .text-sm {
+  font-size: 0.9375rem; /* 15px, was 14px */
+  line-height: 1.7;
+}
+html[lang="ar"] .text-\[11px\] {
+  font-size: 0.775rem;
+  line-height: 1.6;
 }
 
 ::selection {
@@ -258,6 +306,12 @@ html[data-theme="light"] .spot::after {
   animation-play-state: paused;
 }
 
+/* Arabic reads right-to-left, so the ticker travels the other way:
+   items drift left → right, entering from the reader's side. */
+html[dir="rtl"] .ticker-track {
+  animation-direction: reverse;
+}
+
 /* ---- pulses ---- */
 @keyframes ping-soft {
   0% { transform: scale(1); opacity: 0.7; }
@@ -297,6 +351,67 @@ html[data-theme="light"] .spot::after {
   transition: filter 0.45s ease, opacity 0.45s ease;
 }
 
+/* ---- route view transitions: directional slide + fade ----
+   nav-forward: old content leaves toward the start edge, new arrives from the end.
+   Mirrored automatically for RTL. The header carries its own named transition
+   ("site-nav") so it stays fixed while the page moves under it. */
+::view-transition-old(.nav-forward) {
+  animation: 190ms ease-in both vt-fade reverse, 420ms cubic-bezier(0.3, 0.9, 0.3, 1) both vt-slide-out-fw;
+}
+::view-transition-new(.nav-forward) {
+  animation: 260ms ease-out 90ms both vt-fade, 420ms cubic-bezier(0.3, 0.9, 0.3, 1) both vt-slide-in-fw;
+}
+::view-transition-old(.nav-back) {
+  animation: 190ms ease-in both vt-fade reverse, 420ms cubic-bezier(0.3, 0.9, 0.3, 1) both vt-slide-out-bk;
+}
+::view-transition-new(.nav-back) {
+  animation: 260ms ease-out 90ms both vt-fade, 420ms cubic-bezier(0.3, 0.9, 0.3, 1) both vt-slide-in-bk;
+}
+
+@keyframes vt-fade {
+  from { opacity: 0; filter: blur(2px); }
+  to { opacity: 1; filter: blur(0); }
+}
+@keyframes vt-slide-out-fw {
+  to { transform: translateX(calc(-56px * var(--vt-dir, 1))); }
+}
+@keyframes vt-slide-in-fw {
+  from { transform: translateX(calc(56px * var(--vt-dir, 1))); }
+}
+@keyframes vt-slide-out-bk {
+  to { transform: translateX(calc(56px * var(--vt-dir, 1))); }
+}
+@keyframes vt-slide-in-bk {
+  from { transform: translateX(calc(-56px * var(--vt-dir, 1))); }
+}
+:root { --vt-dir: 1; }
+html[dir="rtl"] { --vt-dir: -1; }
+
+/* the fixed header morphs with itself across routes — i.e. it stays put */
+::view-transition-group(site-nav) {
+  animation-duration: 0s;
+}
+
+/* ---- country mini-map: dots light up in a soft wave ---- */
+@keyframes dot-in {
+  0% { opacity: 0.15; }
+  60% { opacity: 1; }
+  100% { opacity: 0.85; }
+}
+.country-dot {
+  animation: dot-in 1.6s ease-out both;
+}
+
+/* ---- country boundary line map: the border draws itself once ---- */
+.outline-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: outline-draw 1.5s ease-out 0.2s both;
+}
+@keyframes outline-draw {
+  to { stroke-dashoffset: 0; }
+}
+
 /* ---- reduced motion: kill all decorative animation ---- */
 @media (prefers-reduced-motion: reduce) {
   .reveal {
@@ -313,7 +428,16 @@ html[data-theme="light"] .spot::after {
   .ring-spin,
   .ping-soft,
   .svg-ping,
-  .caret-blink {
+  .caret-blink,
+  .country-dot {
+    animation: none;
+  }
+  .outline-draw {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
     animation: none;
   }
 }

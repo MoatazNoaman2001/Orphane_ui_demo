@@ -39,7 +39,7 @@ const TRACKED: Record<string, Tracked> = {
   LBN: { en: "Lebanon", ar: "لبنان", status: "pub", ind: 9, src: 5, upd: "2025", grade: "A" },
   EGY: { en: "Egypt", ar: "مصر", status: "pub", ind: 16, src: 9, upd: "2026", grade: "B" },
   MAR: { en: "Morocco", ar: "المغرب", status: "pub", ind: 11, src: 6, upd: "2025", grade: "A" },
-  TUR: { en: "Türkiye", ar: "تركيا", status: "prep", ind: 7, src: 4, upd: "2026", grade: "C" },
+  TUR: { en: "Türkiye", ar: "تركيا", status: "pub", ind: 6, src: 4, upd: "2026", grade: "A" },
   SYR: { en: "Syria", ar: "سوريا", status: "prep", ind: 14, src: 6, upd: "2026", grade: "C" },
   IRQ: { en: "Iraq", ar: "العراق", status: "prep", ind: 8, src: 5, upd: "2026", grade: "C" },
   SDN: { en: "Sudan", ar: "السودان", status: "prep", ind: 6, src: 3, upd: "2026", grade: "D" },

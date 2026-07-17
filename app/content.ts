@@ -39,6 +39,7 @@ export interface Dict {
     lead: string;
     steps: string[];
     gate: string;
+    cta: string;
   };
   countries: {
     no: string;
@@ -46,6 +47,8 @@ export interface Dict {
     lead: string;
     states: { tag: string; name: string; desc: string }[];
     gapNote: string;
+    cta: string;
+    ctaList: string;
   };
   platform: {
     no: string;
@@ -114,8 +117,8 @@ export const content: Record<Lang, Dict> = {
       chips: { source: "SOURCE", year: "YEAR", grade: "GRADE" },
       chipValues: { source: "Ministry of Social Affairs", year: "2024", grade: "B" },
       statusOk: "VALID — eligible for review",
-      statusBad: "REJECTED — a number without its identity cannot be saved",
-      hint: "Try it: click a chip to strip it from the record.",
+      statusBad: "INCOMPLETE — add its source, year, and grade to validate",
+      hint: "Click each part to give the number its identity.",
       gradesTitle: "The confidence scale",
       grades: [
         { g: "A", label: "Verified by multiple independent sources" },
@@ -139,6 +142,7 @@ export const content: Record<Lang, Dict> = {
         "Publish",
       ],
       gate: "FEDERATION GATE — publishing is blocked before approval",
+      cta: "Open the review screen",
     },
     countries: {
       no: "§03",
@@ -151,6 +155,8 @@ export const content: Record<Lang, Dict> = {
         { tag: "INTERNAL", name: "Internal", desc: "Held for Federation use only. Public and internal views are strictly separated." },
       ],
       gapNote: "“A declared data gap is more honest than an invented number.”",
+      cta: "Open a sample country page",
+      ctaList: "Browse all countries & map",
     },
     platform: {
       no: "§04",
@@ -233,8 +239,8 @@ export const content: Record<Lang, Dict> = {
       chips: { source: "المصدر", year: "السنة", grade: "الدرجة" },
       chipValues: { source: "وزارة الشؤون الاجتماعية", year: "٢٠٢٤", grade: "B" },
       statusOk: "صالح — مؤهَّل للمراجعة",
-      statusBad: "مرفوض — رقمٌ بلا هوية لا يُحفَظ",
-      hint: "جرّبها: انقر على أي بطاقة لنزعها من السجل.",
+      statusBad: "غير مكتمل — أضِف المصدر والسنة ودرجة الثقة ليصبح صالحًا",
+      hint: "انقر على كل جزء لتمنح الرقم هويته.",
       gradesTitle: "سلّم الثقة",
       grades: [
         { g: "A", label: "موثَّق من مصادر مستقلة متعددة" },
@@ -258,6 +264,7 @@ export const content: Record<Lang, Dict> = {
         "النشر",
       ],
       gate: "بوابة الاتحاد — النشر محجوب قبل الاعتماد",
+      cta: "افتح شاشة المراجعة",
     },
     countries: {
       no: "§٠٣",
@@ -270,6 +277,8 @@ export const content: Record<Lang, Dict> = {
         { tag: "داخلي", name: "داخلي", desc: "محفوظ لاستخدام الاتحاد فقط. فصلٌ صارم بين العرض العام والداخلي." },
       ],
       gapNote: "«فجوة بياناتٍ مُعلَنة أصدقُ من رقمٍ مُختلَق.»",
+      cta: "افتح صفحة دولة نموذجية",
+      ctaList: "تصفّح كل الدول والخريطة",
     },
     platform: {
       no: "§٠٤",

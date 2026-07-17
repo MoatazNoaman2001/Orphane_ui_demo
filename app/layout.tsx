@@ -38,7 +38,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{var q=new URLSearchParams(location.search).get("theme");var t=q||localStorage.getItem("odo-theme")||(matchMedia("(prefers-color-scheme: light)").matches?"light":"dark");document.documentElement.dataset.theme=t==="light"?"light":"dark"}catch(e){document.documentElement.dataset.theme="dark"}`,
+            __html: `try{var q=new URLSearchParams(location.search).get("theme");var t=q||localStorage.getItem("odo-theme")||(matchMedia("(prefers-color-scheme: light)").matches?"light":"dark");document.documentElement.dataset.theme=t==="light"?"light":"dark";var l=localStorage.getItem("odo-lang");if(l==="ar"){document.documentElement.lang="ar";document.documentElement.dir="rtl"}}catch(e){document.documentElement.dataset.theme="dark"}`,
           }}
         />
         {children}
