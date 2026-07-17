@@ -140,7 +140,7 @@ export default function CountriesPage() {
                   </div>
                   <div className="flex flex-wrap items-center gap-3">
                     {/* search */}
-                    <div className="relative">
+                    <div className="relative w-full sm:w-auto">
                       <svg
                         className="pointer-events-none absolute start-3 top-1/2 -translate-y-1/2 text-foreground/40"
                         width="14"
@@ -158,11 +158,11 @@ export default function CountriesPage() {
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
                         placeholder={t.list.searchPlaceholder}
-                        className="w-56 rounded-lg border border-line bg-ink-900/60 py-2 pe-3 ps-9 text-sm text-foreground placeholder:text-foreground/35 focus:border-accent/50 focus:outline-none"
+                        className="w-full rounded-lg border border-line bg-ink-900/60 py-2 pe-3 ps-9 text-sm text-foreground placeholder:text-foreground/35 focus:border-accent/50 focus:outline-none sm:w-56"
                       />
                     </div>
                     {/* status filter */}
-                    <div className="flex rounded-lg border border-line bg-ink-900/60 p-1">
+                    <div className="flex flex-wrap gap-y-1 rounded-lg border border-line bg-ink-900/60 p-1">
                       <button
                         onClick={() => setStatusFilter("all")}
                         className={`rounded-md px-3 py-1.5 text-xs font-medium transition-colors duration-200 ${

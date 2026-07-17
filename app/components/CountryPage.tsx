@@ -97,7 +97,7 @@ export default function CountryPage() {
                 <div className="latin font-mono text-[10px] tracking-[0.22em] text-accent">{t.demoBar.label}</div>
                 <div className="mt-1 max-w-xl text-xs leading-relaxed text-foreground/55">{t.demoBar.note}</div>
               </div>
-              <div className="flex shrink-0 rounded-lg border border-line bg-ink-900/70 p-1">
+              <div className="flex flex-wrap gap-y-1 self-start rounded-lg border border-line bg-ink-900/70 p-1 sm:shrink-0 sm:self-auto">
                 {(Object.keys(t.demoBar.states) as PageState[]).map((s) => (
                   <button
                     key={s}

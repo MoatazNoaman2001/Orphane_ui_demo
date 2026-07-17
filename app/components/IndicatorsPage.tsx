@@ -96,7 +96,7 @@ export default function IndicatorsPage() {
 
                 {/* controls */}
                 <div className="mt-6 flex flex-wrap items-center gap-3">
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
                     <span className="latin font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/45">
                       {t.countryLabel}
                     </span>
@@ -206,7 +206,8 @@ export default function IndicatorsPage() {
                     </span>
                   </div>
 
-                  <div className="mt-5 space-y-4">
+                  <div className="mt-5 overflow-x-auto">
+                    <div className="min-w-[540px] space-y-4">
                     {compareRows.map(({ country: c, value }) => (
                       <div key={c.iso} className="grid grid-cols-[7.5rem_1fr_auto] items-center gap-4">
                         <div className="flex items-center gap-2 text-sm text-foreground/75">
@@ -250,6 +251,7 @@ export default function IndicatorsPage() {
                         )}
                       </div>
                     ))}
+                    </div>
                   </div>
                 </div>
               </Reveal>

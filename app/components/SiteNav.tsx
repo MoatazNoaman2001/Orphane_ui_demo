@@ -131,16 +131,20 @@ export default function SiteNav({
       >
         <ScrollProgress />
         <div
-          className={`mx-auto flex max-w-6xl items-center justify-between px-5 transition-all duration-500 ${
+          className={`mx-auto flex max-w-6xl items-center justify-between gap-2 px-4 transition-all duration-500 sm:gap-4 sm:px-5 ${
             scrolled ? "h-14" : "h-16"
           }`}
         >
           {homeHref.startsWith("#") ? (
-            <a href={homeHref} className="group flex items-center gap-3">
+            <a href={homeHref} className="group flex min-w-0 flex-1 items-center gap-2.5 sm:flex-initial sm:gap-3">
               <BrandBlock title={title} subtitle={subtitle} scrolled={scrolled} />
             </a>
           ) : (
-            <Link href={homeHref} transitionTypes={["nav-back"]} className="group flex items-center gap-3">
+            <Link
+              href={homeHref}
+              transitionTypes={["nav-back"]}
+              className="group flex min-w-0 flex-1 items-center gap-2.5 sm:flex-initial sm:gap-3"
+            >
               <BrandBlock title={title} subtitle={subtitle} scrolled={scrolled} />
             </Link>
           )}
@@ -179,11 +183,11 @@ export default function SiteNav({
             )}
           </nav>
 
-          <div className="flex items-center gap-3">
+          <div className="flex shrink-0 items-center gap-2 sm:gap-3">
             <button
               onClick={toggleTheme}
               aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
-              className="flex h-8 w-8 items-center justify-center rounded-full border border-line text-foreground/70 transition hover:rotate-[20deg] hover:border-accent/50 hover:text-accent"
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-line text-foreground/70 transition hover:rotate-[20deg] hover:border-accent/50 hover:text-accent"
             >
               {theme === "dark" ? (
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -198,7 +202,7 @@ export default function SiteNav({
             </button>
             <button
               onClick={() => setLang(lang === "en" ? "ar" : "en")}
-              className="latin rounded-full border border-accent/40 px-4 py-1.5 font-mono text-xs font-medium text-accent transition hover:bg-accent/10 hover:shadow-[0_0_16px_rgba(31,194,242,0.3)]"
+              className="latin shrink-0 rounded-full border border-accent/40 px-3 py-1.5 font-mono text-xs font-medium text-accent transition hover:bg-accent/10 hover:shadow-[0_0_16px_rgba(31,194,242,0.3)] sm:px-4"
             >
               {lang === "en" ? "العربية" : "English"}
             </button>
@@ -229,12 +233,14 @@ export default function SiteNav({
 function BrandBlock({ title, subtitle, scrolled }: { title: string; subtitle: string; scrolled: boolean }) {
   return (
     <>
-      <span className="transition-transform duration-500 group-hover:rotate-[30deg]">
+      <span className="shrink-0 transition-transform duration-500 group-hover:rotate-[30deg]">
         <Mark size={scrolled ? 30 : 34} />
       </span>
-      <span className="leading-tight">
-        <span className="block text-sm font-semibold tracking-wide">{title}</span>
-        <span className="latin block font-mono text-[10px] uppercase tracking-[0.2em] text-accent/70">{subtitle}</span>
+      <span className="min-w-0 leading-tight">
+        <span className="block truncate text-sm font-semibold tracking-wide">{title}</span>
+        <span className="latin block truncate font-mono text-[10px] uppercase tracking-[0.2em] text-accent/70">
+          {subtitle}
+        </span>
       </span>
     </>
   );
