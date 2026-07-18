@@ -534,7 +534,7 @@ export default function PortalPage() {
                       </button>
                       <button
                         onClick={send}
-                        className="rounded-lg bg-gradient-to-r from-accent to-[#4f9de8] px-7 py-2.5 text-sm font-semibold text-[#052038] shadow-[0_0_24px_rgba(31,194,242,0.35)] transition hover:brightness-110"
+                        className="rounded-lg bg-gradient-to-r from-accent to-[#4f9de8] px-7 py-2.5 text-sm font-semibold text-on-accent shadow-[0_0_24px_rgba(31,194,242,0.35)] transition hover:brightness-110"
                       >
                         {t.form.sendButton} ←
                       </button>

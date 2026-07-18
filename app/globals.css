@@ -28,6 +28,9 @@
   --state-prep: #4f9de8;
   --state-gap: #e3a63b;
   --state-internal: #8b9dc9;
+
+  /* text color on accent-filled surfaces (buttons) — flips per theme */
+  --on-accent: #052038;
 }
 
 html[data-theme="light"] {
@@ -55,6 +58,8 @@ html[data-theme="light"] {
   --state-gap: #91650e;
   --state-internal: #56698f;
 
+  --on-accent: #ffffff;
+
   color-scheme: light;
   scrollbar-color: rgba(28, 71, 145, 0.35) var(--ink-950);
 }
@@ -81,6 +86,7 @@ html[data-theme="light"] [class*="text-accent/"] {
   --color-line-soft: var(--line-soft);
   --color-danger: var(--danger);
   --color-warn: var(--warn);
+  --color-on-accent: var(--on-accent);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
