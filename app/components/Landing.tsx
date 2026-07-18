@@ -64,7 +64,7 @@ export default function Landing() {
           { href: "#countries", label: t.nav.countries },
           { href: "#platform", label: t.nav.platform },
         ]}
-        cta={{ href: "#cta", label: t.nav.cta }}
+        cta={{ href: "/designs/observatory/access", label: t.nav.cta }}
       />
 
       {/* ================= HERO ================= */}
@@ -120,12 +120,13 @@ export default function Landing() {
                 >
                   {t.hero.ctaPrimary}
                 </a>
-                <a
-                  href="#pipeline"
+                <Link
+                  href="/designs/observatory/methodology"
+                  transitionTypes={["nav-forward"]}
                   className="rounded-full border border-line bg-ink-900/40 px-7 py-3 text-sm font-medium text-foreground/80 backdrop-blur-sm transition duration-300 hover:-translate-y-0.5 hover:border-accent/50 hover:text-accent"
                 >
                   {t.hero.ctaSecondary}
-                </a>
+                </Link>
               </div>
             </Reveal>
           </div>
@@ -355,7 +356,7 @@ export default function Landing() {
                 {t.pipeline.gate}
               </div>
               <Link
-                href="/designs/observatory/review"
+                href="/designs/observatory/access"
                 transitionTypes={["nav-forward"]}
                 className="group inline-flex items-center gap-2 rounded-full border border-line bg-ink-900/40 px-5 py-2 text-xs font-medium text-foreground/75 transition duration-300 hover:border-accent/50 hover:text-accent"
               >
@@ -451,7 +452,17 @@ export default function Landing() {
           <div className="mt-12 grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
             {t.platform.features.map((f, i) => {
               const href =
-                i === 0 ? "/designs/observatory/countries" : i === 1 ? "/designs/observatory/indicators" : undefined;
+                i === 0
+                  ? "/designs/observatory/countries"
+                  : i === 1
+                  ? "/designs/observatory/indicators"
+                  : i === 2
+                  ? "/designs/observatory/sources"
+                  : i === 3
+                  ? "/designs/observatory/access"
+                  : i === 5
+                  ? "/designs/observatory/reports"
+                  : undefined;
               const card = (
                 <SpotCard className="group h-full bg-ink-900 p-7 transition-colors duration-300 hover:bg-ink-850">
                   <div className="flex items-start justify-between">
@@ -520,12 +531,13 @@ export default function Landing() {
             <h2 className="mt-8 text-3xl font-bold tracking-tight sm:text-4xl">{t.cta.title}</h2>
             <p className="mx-auto mt-4 max-w-xl leading-relaxed text-foreground/65">{t.cta.sub}</p>
             <div className="mt-9 flex flex-wrap items-center justify-center gap-4">
-              <a
-                href="#top"
+              <Link
+                href="/designs/observatory/access"
+                transitionTypes={["nav-forward"]}
                 className="rounded-full bg-gradient-to-r from-accent to-[#4f9de8] px-8 py-3.5 text-sm font-semibold text-[#052038] shadow-[0_0_28px_rgba(31,194,242,0.4)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_50px_rgba(31,194,242,0.65)]"
               >
                 {t.cta.button}
-              </a>
+              </Link>
               <span className="latin font-mono text-xs tracking-[0.18em] text-foreground/40">
                 {t.cta.secondary}
               </span>
@@ -546,7 +558,7 @@ export default function Landing() {
               </div>
             </div>
           </div>
-          <div className="latin font-mono text-[10px] tracking-[0.22em] text-foreground/35">
+          <div className="latin max-w-full text-center font-mono text-[10px] leading-relaxed tracking-[0.18em] text-foreground/35 sm:text-start">
             EVERY NUMBER · A SOURCE · A YEAR · A GRADE
           </div>
         </div>

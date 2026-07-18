@@ -86,7 +86,7 @@ export default function CountryPage() {
             { href: "#sources", label: t.nav.sources },
             { href: "#partners", label: t.nav.partners },
           ]}
-          cta={{ href: "/designs/observatory", label: `← ${t.backToObservatory}`, back: true }}
+          cta={{ href: "/designs/observatory", label: `${t.backToObservatory}`, back: true }}
         />
 
         <main className="pt-16">

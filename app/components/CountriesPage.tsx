@@ -72,7 +72,7 @@ export default function CountriesPage() {
             { href: "#map", label: t.nav.map },
             { href: "#list", label: t.nav.list },
           ]}
-          cta={{ href: "/designs/observatory", label: `← ${t.backToObservatory}`, back: true }}
+          cta={{ href: "/designs/observatory", label: `${t.backToObservatory}`, back: true }}
         />
 
         <main className="pt-16">
@@ -270,7 +270,19 @@ export default function CountriesPage() {
                     </tbody>
                   </table>
                 </div>
-                <p className="mt-3 text-xs text-foreground/40">{t.list.previewNote}</p>
+                <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+                  <p className="text-xs text-foreground/40">{t.list.previewNote}</p>
+                  <Link
+                    href="/designs/observatory/organizations"
+                    transitionTypes={["nav-forward"]}
+                    className="inline-flex items-center gap-1.5 text-xs font-medium text-accent transition hover:underline"
+                  >
+                    {lang === "ar" ? "دليل المؤسسات" : "Organizations directory"}
+                    <svg className="rtl:rotate-180" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M5 12h14m-6-6 6 6-6 6" />
+                    </svg>
+                  </Link>
+                </div>
               </Reveal>
             </div>
           </section>

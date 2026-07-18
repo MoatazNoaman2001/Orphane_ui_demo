@@ -64,7 +64,7 @@ export default function IndicatorsPage() {
             { href: "#by-country", label: t.nav.byCountry },
             { href: "#compare", label: t.nav.compare },
           ]}
-          cta={{ href: "/designs/observatory", label: `← ${t.backToObservatory}`, back: true }}
+          cta={{ href: "/designs/observatory", label: `${t.backToObservatory}`, back: true }}
         />
 
         <main className="pt-16">
@@ -262,7 +262,7 @@ export default function IndicatorsPage() {
           <footer className="border-t border-line">
             <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-8">
               <p className="text-xs leading-relaxed text-foreground/45">{t.dataNote}</p>
-              <div className="latin shrink-0 font-mono text-[10px] tracking-[0.22em] text-foreground/35">
+              <div className="latin max-w-full text-center font-mono text-[10px] leading-relaxed tracking-[0.18em] text-foreground/35 sm:shrink-0 sm:text-start">
                 EVERY NUMBER · A SOURCE · A YEAR · A GRADE
               </div>
             </div>

@@ -128,7 +128,7 @@ export default function ReviewPage() {
             { href: "#queue", label: t.nav.queue },
             { href: "#detail", label: t.nav.detail },
           ]}
-          cta={{ href: "/designs/observatory", label: `← ${t.backToObservatory}`, back: true }}
+          cta={{ href: "/designs/observatory", label: `${t.backToObservatory}`, back: true }}
         />
 
         <main className="pt-16">
@@ -412,7 +412,7 @@ export default function ReviewPage() {
           <footer className="border-t border-line">
             <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-8">
               <p className="text-xs leading-relaxed text-foreground/45">{t.demoNote}</p>
-              <div className="latin shrink-0 font-mono text-[10px] tracking-[0.22em] text-foreground/35">
+              <div className="latin max-w-full text-center font-mono text-[10px] leading-relaxed tracking-[0.18em] text-foreground/35 sm:shrink-0 sm:text-start">
                 NO PUBLICATION BEFORE APPROVAL
               </div>
             </div>

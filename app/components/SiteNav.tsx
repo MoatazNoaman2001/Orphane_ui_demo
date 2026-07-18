@@ -218,8 +218,23 @@ export default function SiteNav({
                 <Link
                   href={cta.href}
                   transitionTypes={[cta.back ? "nav-back" : "nav-forward"]}
-                  className="hidden rounded-full bg-gradient-to-r from-brand to-[#2a63c4] px-4 py-1.5 text-xs font-semibold text-white transition hover:brightness-125 sm:block"
+                  className="hidden items-center gap-1.5 rounded-full bg-gradient-to-r from-brand to-[#2a63c4] px-4 py-1.5 text-xs font-semibold text-white transition hover:brightness-125 sm:flex"
                 >
+                  {cta.back && (
+                    <svg
+                      className="rtl:rotate-180"
+                      width="12"
+                      height="12"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.4"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M19 12H5m6 6-6-6 6-6" />
+                    </svg>
+                  )}
                   {cta.label}
                 </Link>
               ))}
