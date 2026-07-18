@@ -23,6 +23,14 @@ const designs = [
     desc: "Light, institutional, map-first — the visual language of UNICEF Data and UNHCR. Country statuses on an honest tile map, with data gaps as the loudest element.",
     tags: ["Light / institutional", "Map-first", "Humanitarian-data style"],
   },
+  {
+    href: "/designs/humanitarian",
+    no: "03",
+    name: "The Humanitarian",
+    nameAr: "الإنساني",
+    desc: "Warm, light, charity-sector language. The observatory presented through its services and results — mission first, coverage counters, audience-focused offerings, latest updates — in the tradition of UNICEF Data and humanitarian organizations.",
+    tags: ["Warm light", "Services & results first", "Serif headlines", "Image placeholders"],
+  },
 ];
 
 function ObservatoryThumb() {
@@ -90,6 +98,29 @@ function AccessMapThumb() {
   );
 }
 
+function HumanitarianThumb() {
+  return (
+    <div className="relative h-44 overflow-hidden rounded-xl border border-line bg-[#faf7f1] p-4">
+      <div className="h-2.5 w-32 rounded-sm bg-[#243048]" />
+      <div className="mt-1.5 h-2.5 w-24 rounded-sm bg-[#1c4791]" />
+      <div className="mt-2 h-1.5 w-40 rounded-sm bg-[#57607a]/30" />
+      <div className="mt-3 flex gap-2">
+        <div className="h-6 w-20 rounded-full bg-[#1c4791]" />
+        <div className="h-6 w-20 rounded-full border border-[#e8e1d2] bg-white" />
+      </div>
+      <div className="absolute end-4 top-4 h-[4.5rem] w-24 rounded-lg" style={{ background: "linear-gradient(135deg, #f2e7d3, #dde3d5)" }} />
+      <div className="absolute inset-x-4 bottom-3 flex gap-2">
+        {["193", "80", "151", "363"].map((n) => (
+          <div key={n} className="flex-1 rounded-lg border border-[#e8e1d2] bg-white py-1.5 text-center">
+            <div className="text-[10px] font-extrabold text-[#1c4791]">{n}</div>
+            <div className="mx-auto mt-0.5 h-1 w-8 rounded-sm bg-[#57607a]/25" />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function DesignGallery() {
   return (
     <main className="relative min-h-screen bg-ink-950 text-foreground">
@@ -116,7 +147,7 @@ export default function DesignGallery() {
               href={d.href}
               className="group rounded-2xl border border-line bg-ink-900/50 p-5 transition duration-300 hover:-translate-y-1.5 hover:border-accent/50 hover:shadow-[0_14px_50px_rgba(28,71,145,0.35)]"
             >
-              {d.no === "01" ? <ObservatoryThumb /> : <AccessMapThumb />}
+              {d.no === "01" ? <ObservatoryThumb /> : d.no === "02" ? <AccessMapThumb /> : <HumanitarianThumb />}
               <div className="mt-5 flex items-baseline justify-between gap-3">
                 <div>
                   <div className="latin font-mono text-[11px] tracking-[0.25em] text-accent">
