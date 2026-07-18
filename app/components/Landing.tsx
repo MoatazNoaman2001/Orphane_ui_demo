@@ -440,67 +440,63 @@ export default function Landing() {
         </Reveal>
       </section>
 
-      {/* ================= §04 PLATFORM ================= */}
+      {/* ================= §04 WHAT WE OFFER ================= */}
       <section id="platform" className="scroll-mt-24 border-t border-line">
         <div className="mx-auto max-w-6xl px-5 py-24">
           <Reveal>
             <div className="latin font-mono text-sm tracking-[0.3em] text-accent">{t.platform.no}</div>
-            <h2 className="mt-3 max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl">{t.platform.title}</h2>
-            <p className="mt-4 max-w-2xl leading-relaxed text-foreground/65">{t.platform.lead}</p>
+            <h2 className="mt-3 max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl">{t.offer.title}</h2>
+            <p className="mt-4 max-w-2xl leading-relaxed text-foreground/65">{t.offer.lead}</p>
           </Reveal>
 
-          <div className="mt-12 grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
-            {t.platform.features.map((f, i) => {
-              const href =
-                i === 0
-                  ? "/designs/observatory/countries"
-                  : i === 1
-                  ? "/designs/observatory/indicators"
-                  : i === 2
-                  ? "/designs/observatory/sources"
-                  : i === 3
-                  ? "/designs/observatory/access"
-                  : i === 5
-                  ? "/designs/observatory/reports"
-                  : undefined;
-              const card = (
-                <SpotCard className="group h-full bg-ink-900 p-7 transition-colors duration-300 hover:bg-ink-850">
-                  <div className="flex items-start justify-between">
-                    <div className="inline-flex rounded-xl border border-accent/20 bg-accent/5 p-2.5 text-accent/80 transition duration-300 group-hover:border-accent/50 group-hover:text-accent group-hover:shadow-[0_0_20px_rgba(31,194,242,0.25)]">
-                      <FeatureIcon i={i} />
-                    </div>
-                    {href && (
-                      <svg
-                        className="mt-1 text-foreground/30 transition-colors duration-300 group-hover:text-accent rtl:rotate-180"
-                        width="15"
-                        height="15"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M7 17 17 7M9 7h8v8" />
-                      </svg>
-                    )}
+          <div className="mt-12 grid gap-5 sm:grid-cols-2">
+            {t.offer.items.map((s, i) => (
+              <Reveal key={i} delay={(i % 2) * 80} className="h-full">
+                <SpotCard className="group flex h-full flex-col rounded-2xl border border-line bg-ink-900/50 p-7 backdrop-blur-sm transition-colors duration-300 hover:border-accent/40">
+                  <div className="inline-flex w-fit rounded-xl border border-accent/20 bg-accent/5 p-2.5 text-accent/80 transition duration-300 group-hover:border-accent/50 group-hover:text-accent">
+                    <FeatureIcon i={[2, 0, 3, 4][i]} />
                   </div>
-                  <div className="mt-4 font-semibold">{f.name}</div>
-                  <p className="mt-2 text-sm leading-relaxed text-foreground/55">{f.desc}</p>
+                  <h3 className="mt-4 text-lg font-semibold">{s.audience}</h3>
+                  <p className="mt-2 flex-1 text-sm leading-relaxed text-foreground/60">{s.what}</p>
+                  <Link
+                    href={s.href}
+                    transitionTypes={["nav-forward"]}
+                    className="mt-4 inline-flex w-fit items-center gap-1.5 text-sm font-medium text-accent transition-all hover:gap-2.5"
+                  >
+                    {s.link}
+                    <svg className="rtl:rotate-180" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M5 12h14m-6-6 6 6-6 6" />
+                    </svg>
+                  </Link>
                 </SpotCard>
-              );
-              return (
-                <Reveal key={i} delay={i * 70} className="h-full">
-                  {href ? (
-                    <Link href={href} transitionTypes={["nav-forward"]} className="block h-full">
-                      {card}
-                    </Link>
-                  ) : (
-                    card
-                  )}
-                </Reveal>
-              );
-            })}
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ================= LATEST ================= */}
+      <section className="border-t border-line">
+        <div className="mx-auto max-w-6xl px-5 py-24">
+          <Reveal>
+            <h2 className="max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl">{t.latest.title}</h2>
+            <p className="mt-4 max-w-2xl leading-relaxed text-foreground/65">{t.latest.lead}</p>
+          </Reveal>
+
+          <div className="mt-10 grid gap-5 md:grid-cols-3">
+            {t.latest.items.map((u, i) => (
+              <Reveal key={i} delay={i * 80} className="h-full">
+                <SpotCard className="flex h-full flex-col rounded-2xl border border-line bg-ink-900/50 p-6 backdrop-blur-sm transition-colors duration-300 hover:border-accent/40">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="rounded-full border border-accent/25 bg-accent/5 px-2.5 py-0.5 text-[11px] font-medium text-accent/90">
+                      {u.tag}
+                    </span>
+                    <span className="latin font-mono text-[11px] text-foreground/40">{u.date}</span>
+                  </div>
+                  <h3 className="mt-4 text-base font-semibold leading-snug">{u.title}</h3>
+                </SpotCard>
+              </Reveal>
+            ))}
           </div>
         </div>
       </section>

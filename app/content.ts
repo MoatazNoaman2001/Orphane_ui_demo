@@ -16,6 +16,16 @@ export interface Dict {
     firstRelease: string;
   };
   stats: { value: string; label: string; chip: string }[];
+  offer: {
+    title: string;
+    lead: string;
+    items: { audience: string; what: string; link: string; href: string }[];
+  };
+  latest: {
+    title: string;
+    lead: string;
+    items: { tag: string; title: string; date: string }[];
+  };
   tickerNote: string;
   ticker: { text: string; tone: "ok" | "warn" | "gap" | "info" }[];
   rule: {
@@ -75,7 +85,7 @@ export const content: Record<Lang, Dict> = {
       rule: "The Rule",
       pipeline: "Review",
       countries: "Countries",
-      platform: "Platform",
+      platform: "What we offer",
       cta: "Partner Access",
     },
     hero: {
@@ -89,11 +99,50 @@ export const content: Record<Lang, Dict> = {
       firstRelease: "First Release · 2026",
     },
     stats: [
-      { value: "0", label: "personal data fields — ever", chip: "BY DESIGN" },
-      { value: "100%", label: "of numbers carry source + year", chip: "VALIDATED" },
-      { value: "A–E", label: "confidence grade on every figure", chip: "CLASSIFIED" },
-      { value: "2", label: "languages, one platform", chip: "AR · EN" },
+      { value: "193", label: "countries in scope", chip: "18 REGIONS" },
+      { value: "80", label: "country files prepared", chip: "BATCH 01" },
+      { value: "151", label: "indicators tracked", chip: "5 DATA TYPES" },
+      { value: "363", label: "documented sources", chip: "GRADED A–E" },
     ],
+    offer: {
+      title: "What the Observatory offers",
+      lead: "One platform, serving everyone who works for orphans — each with their own door in.",
+      items: [
+        {
+          audience: "For researchers & media",
+          what: "Country profiles with graded, sourced indicators — and approved data exports (CSV / Excel) you can cite with confidence.",
+          link: "Browse country data",
+          href: "/designs/observatory/countries",
+        },
+        {
+          audience: "For donors & supporters",
+          what: "See where the need is documented and where the data gaps are — every number carries its source, year, and confidence grade.",
+          link: "See the indicators",
+          href: "/designs/observatory/indicators",
+        },
+        {
+          audience: "For partner organizations",
+          what: "A private portal to contribute your aggregated figures, track their review, and be recognized for your work on the ground.",
+          link: "About the partner portal",
+          href: "/designs/observatory/access",
+        },
+        {
+          audience: "For the Federation's decisions",
+          what: "A single reviewed evidence base: which countries are covered, which need partners, and where to direct effort next.",
+          link: "Read the methodology",
+          href: "/designs/observatory/methodology",
+        },
+      ],
+    },
+    latest: {
+      title: "Latest from the Observatory",
+      lead: "What was published, updated, or released recently.",
+      items: [
+        { tag: "Country page", title: "Türkiye published with grade A — official 2024 statistics", date: "July 2026" },
+        { tag: "Report", title: "Children in Türkiye 2024 — country brief now available", date: "June 2026" },
+        { tag: "Data update", title: "80 country files imported and under verification", date: "June 2026" },
+      ],
+    },
     tickerNote: "Illustrative feed — no live data is shown before Federation approval",
     ticker: [
       { text: "JO · Country page · PUBLISHED", tone: "ok" },
@@ -197,7 +246,7 @@ export const content: Record<Lang, Dict> = {
       rule: "القاعدة",
       pipeline: "المراجعة",
       countries: "الدول",
-      platform: "المنصة",
+      platform: "ماذا نقدّم",
       cta: "بوابة الشركاء",
     },
     hero: {
@@ -211,11 +260,50 @@ export const content: Record<Lang, Dict> = {
       firstRelease: "الإصدار الأول · ٢٠٢٦",
     },
     stats: [
-      { value: "0", label: "حقول بيانات شخصية — أبدًا", chip: "بالتصميم" },
-      { value: "100%", label: "من الأرقام لها مصدر وسنة", chip: "مُتحقَّق" },
-      { value: "A–E", label: "درجة ثقة على كل رقم", chip: "مُصنَّف" },
-      { value: "2", label: "لغتان، منصة واحدة", chip: "عربي · EN" },
+      { value: "193", label: "دولة ضمن النطاق", chip: "18 إقليمًا" },
+      { value: "80", label: "ملفًا قُطريًا جاهزًا", chip: "الدفعة 01" },
+      { value: "151", label: "مؤشرًا مُتابَعًا", chip: "5 أنواع بيانات" },
+      { value: "363", label: "مصدرًا موثّقًا", chip: "مصنّفة A–E" },
     ],
+    offer: {
+      title: "ماذا يقدّم المرصد",
+      lead: "منصة واحدة تخدم كل من يعمل لأجل الأيتام — ولكلٍّ بابه الخاص.",
+      items: [
+        {
+          audience: "للباحثين والإعلاميين",
+          what: "ملفات قُطرية بمؤشرات مصنّفة وموثّقة المصدر — وتصدير للبيانات المعتمدة (CSV / Excel) تقتبسه بثقة.",
+          link: "تصفّح بيانات الدول",
+          href: "/designs/observatory/countries",
+        },
+        {
+          audience: "للمانحين والداعمين",
+          what: "اعرف أين الاحتياج موثّق وأين فجوات البيانات — كل رقم يحمل مصدره وسنته ودرجة ثقته.",
+          link: "اطّلع على المؤشرات",
+          href: "/designs/observatory/indicators",
+        },
+        {
+          audience: "للمؤسسات الشريكة",
+          what: "بوابة خاصة تقدّمون عبرها أرقامكم المجمّعة، وتتابعون مراجعتها، ويُعترف بعملكم الميداني.",
+          link: "عن بوابة الشركاء",
+          href: "/designs/observatory/access",
+        },
+        {
+          audience: "لقرارات الاتحاد",
+          what: "قاعدة أدلة مُراجَعة واحدة: أي الدول مغطاة، وأيها يحتاج شركاء، وأين يتّجه الجهد تاليًا.",
+          link: "اقرأ المنهجية",
+          href: "/designs/observatory/methodology",
+        },
+      ],
+    },
+    latest: {
+      title: "جديد المرصد",
+      lead: "ما نُشر أو حُدّث أو صدر مؤخرًا.",
+      items: [
+        { tag: "صفحة دولة", title: "نُشرت صفحة تركيا بدرجة A — إحصاءات رسمية 2024", date: "يوليو 2026" },
+        { tag: "تقرير", title: "الأطفال في تركيا 2024 — الموجز القُطري متاح الآن", date: "يونيو 2026" },
+        { tag: "تحديث بيانات", title: "استيراد 80 ملفًا قُطريًا ودخولها طور التحقق", date: "يونيو 2026" },
+      ],
+    },
     tickerNote: "شريط توضيحي — لا تُعرض بيانات حقيقية قبل اعتماد الاتحاد",
     ticker: [
       { text: "الأردن · صفحة الدولة · منشورة", tone: "ok" },
