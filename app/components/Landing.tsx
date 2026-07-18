@@ -116,7 +116,7 @@ export default function Landing() {
               <div className="mt-8 flex flex-wrap items-center gap-4">
                 <a
                   href="#rule"
-                  className="rounded-full bg-gradient-to-r from-accent to-[#4f9de8] px-7 py-3 text-sm font-semibold text-on-accent shadow-[0_0_28px_rgba(31,194,242,0.4)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_48px_rgba(31,194,242,0.65)]"
+                  className="rounded-full bg-accent px-7 py-3 text-sm font-semibold text-on-accent shadow-[0_0_28px_rgba(31,194,242,0.4)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_48px_rgba(31,194,242,0.65)]"
                 >
                   {t.hero.ctaPrimary}
                 </a>
@@ -534,7 +534,7 @@ export default function Landing() {
               <Link
                 href="/designs/observatory/access"
                 transitionTypes={["nav-forward"]}
-                className="rounded-full bg-gradient-to-r from-accent to-[#4f9de8] px-8 py-3.5 text-sm font-semibold text-on-accent shadow-[0_0_28px_rgba(31,194,242,0.4)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_50px_rgba(31,194,242,0.65)]"
+                className="rounded-full bg-accent px-8 py-3.5 text-sm font-semibold text-on-accent shadow-[0_0_28px_rgba(31,194,242,0.4)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_50px_rgba(31,194,242,0.65)]"
               >
                 {t.cta.button}
               </Link>

@@ -153,7 +153,7 @@ export default function SiteNav({
             {/* sliding indicator */}
             <span
               aria-hidden="true"
-              className={`absolute -bottom-[3px] h-[2px] rounded-full bg-gradient-to-r from-accent to-[#4f9de8] transition-all duration-500 ${
+              className={`absolute -bottom-[3px] h-[2px] rounded-full bg-accent transition-all duration-500 ${
                 bar ? "opacity-100" : "opacity-0"
               }`}
               style={bar ? { left: bar.left, width: bar.width, transitionTimingFunction: "cubic-bezier(0.3, 0.9, 0.3, 1)" } : { left: 0, width: 0 }}
@@ -210,7 +210,7 @@ export default function SiteNav({
               (cta.href.startsWith("#") ? (
                 <a
                   href={cta.href}
-                  className="hidden rounded-full bg-gradient-to-r from-brand to-[#2a63c4] px-4 py-1.5 text-xs font-semibold text-white transition hover:brightness-125 sm:block"
+                  className="hidden rounded-full bg-brand px-4 py-1.5 text-xs font-semibold text-white transition hover:brightness-125 sm:block"
                 >
                   {cta.label}
                 </a>
@@ -218,7 +218,7 @@ export default function SiteNav({
                 <Link
                   href={cta.href}
                   transitionTypes={[cta.back ? "nav-back" : "nav-forward"]}
-                  className="hidden items-center gap-1.5 rounded-full bg-gradient-to-r from-brand to-[#2a63c4] px-4 py-1.5 text-xs font-semibold text-white transition hover:brightness-125 sm:flex"
+                  className="hidden items-center gap-1.5 rounded-full bg-brand px-4 py-1.5 text-xs font-semibold text-white transition hover:brightness-125 sm:flex"
                 >
                   {cta.back && (
                     <svg

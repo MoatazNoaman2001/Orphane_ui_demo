@@ -179,7 +179,7 @@ export default function PortalPage() {
                   </div>
                   <button
                     onClick={openNew}
-                    className="rounded-lg bg-gradient-to-r from-brand to-[#2a63c4] px-5 py-2.5 text-sm font-semibold text-white transition hover:brightness-125"
+                    className="rounded-lg bg-brand px-5 py-2.5 text-sm font-semibold text-white transition hover:brightness-125"
                   >
                     + {t.list.newButton}
                   </button>
@@ -433,7 +433,7 @@ export default function PortalPage() {
                       <button
                         onClick={() => setStep(1)}
                         disabled={!allComplete}
-                        className="rounded-lg bg-gradient-to-r from-brand to-[#2a63c4] px-6 py-2.5 text-sm font-semibold text-white transition enabled:hover:brightness-125 disabled:cursor-not-allowed disabled:opacity-40"
+                        className="rounded-lg bg-brand px-6 py-2.5 text-sm font-semibold text-white transition enabled:hover:brightness-125 disabled:cursor-not-allowed disabled:opacity-40"
                       >
                         {t.form.nextButton}
                       </button>
@@ -474,7 +474,7 @@ export default function PortalPage() {
                       </button>
                       <button
                         onClick={() => setStep(2)}
-                        className="rounded-lg bg-gradient-to-r from-brand to-[#2a63c4] px-6 py-2.5 text-sm font-semibold text-white transition hover:brightness-125"
+                        className="rounded-lg bg-brand px-6 py-2.5 text-sm font-semibold text-white transition hover:brightness-125"
                       >
                         {t.form.nextButton}
                       </button>
@@ -534,7 +534,7 @@ export default function PortalPage() {
                       </button>
                       <button
                         onClick={send}
-                        className="rounded-lg bg-gradient-to-r from-accent to-[#4f9de8] px-7 py-2.5 text-sm font-semibold text-on-accent shadow-[0_0_24px_rgba(31,194,242,0.35)] transition hover:brightness-110"
+                        className="rounded-lg bg-accent px-7 py-2.5 text-sm font-semibold text-on-accent shadow-[0_0_24px_rgba(31,194,242,0.35)] transition hover:brightness-110"
                       >
                         {t.form.sendButton} ←
                       </button>
