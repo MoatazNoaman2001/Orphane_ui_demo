@@ -11,6 +11,7 @@ import {
 } from "../content-indicators";
 import { content } from "../content";
 import { useLang } from "./prefs";
+import { portalCta, publicNav } from "../nav-public";
 
 const nf = new Intl.NumberFormat("en-US");
 
@@ -60,11 +61,8 @@ export default function IndicatorsPage() {
           title={shared.hero.kicker}
           subtitle={`OCF · ${t.hero.title}`}
           homeHref="/designs/observatory"
-          links={[
-            { href: "#by-country", label: t.nav.byCountry },
-            { href: "#compare", label: t.nav.compare },
-          ]}
-          cta={{ href: "/designs/observatory", label: `${t.backToObservatory}`, back: true }}
+          links={publicNav(lang)}
+          cta={portalCta(lang)}
         />
 
         <main className="pt-16">

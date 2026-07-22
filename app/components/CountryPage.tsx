@@ -7,6 +7,7 @@ import { GRADE_COLORS, Reveal, SpotCard, tint } from "./motion";
 import { countryContent, type CountryIndicator, type PageState } from "../content-country";
 import { content } from "../content";
 import { useLang } from "./prefs";
+import { portalCta, publicNav } from "../nav-public";
 
 const nf = new Intl.NumberFormat("en-US");
 
@@ -80,13 +81,8 @@ export default function CountryPage() {
           title={shared.hero.kicker}
           subtitle={`OCF · ${t.hero.name}`}
           homeHref="/designs/observatory"
-          links={[
-            { href: "#overview", label: t.nav.overview },
-            { href: "#indicators", label: t.nav.indicators },
-            { href: "#sources", label: t.nav.sources },
-            { href: "#partners", label: t.nav.partners },
-          ]}
-          cta={{ href: "/designs/observatory", label: `${t.backToObservatory}`, back: true }}
+          links={publicNav(lang)}
+          cta={portalCta(lang)}
         />
 
         <main className="pt-16">

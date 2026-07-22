@@ -8,6 +8,7 @@ import { GRADE_COLORS, Reveal, tint } from "./motion";
 import { COUNTRY_ROWS, countriesContent, type CountryStatus } from "../content-countries";
 import { content } from "../content";
 import { useLang } from "./prefs";
+import { portalCta, publicNav } from "../nav-public";
 
 const STATUS_COLORS: Record<CountryStatus, string> = {
   pub: "var(--state-pub)",
@@ -68,11 +69,8 @@ export default function CountriesPage() {
           title={shared.hero.kicker}
           subtitle={`OCF · ${t.hero.title}`}
           homeHref="/designs/observatory"
-          links={[
-            { href: "#map", label: t.nav.map },
-            { href: "#list", label: t.nav.list },
-          ]}
-          cta={{ href: "/designs/observatory", label: `${t.backToObservatory}`, back: true }}
+          links={publicNav(lang)}
+          cta={portalCta(lang)}
         />
 
         <main className="pt-16">

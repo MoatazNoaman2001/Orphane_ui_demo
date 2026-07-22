@@ -8,6 +8,7 @@ import SiteNav, { Mark } from "./SiteNav";
 import { GRADE_COLORS, Reveal, Scramble, SpotCard, TONE_COLORS, tint } from "./motion";
 import { useLang, useTheme } from "./prefs";
 import { content } from "../content";
+import { portalCta, publicNav } from "../nav-public";
 
 /* ---------- feature icons ---------- */
 function FeatureIcon({ i }: { i: number }) {
@@ -58,13 +59,8 @@ export default function Landing() {
         title={t.hero.kicker}
         subtitle={`OCF · ${t.hero.firstRelease}`}
         homeHref="#top"
-        links={[
-          { href: "#rule", label: t.nav.rule },
-          { href: "#pipeline", label: t.nav.pipeline },
-          { href: "#countries", label: t.nav.countries },
-          { href: "#platform", label: t.nav.platform },
-        ]}
-        cta={{ href: "/designs/observatory/access", label: t.nav.cta }}
+        links={publicNav(lang)}
+        cta={portalCta(lang)}
       />
 
       {/* ================= HERO ================= */}

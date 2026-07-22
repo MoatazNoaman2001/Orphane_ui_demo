@@ -5,11 +5,13 @@ import Link from "next/link";
 import { useLang, useTheme } from "./prefs";
 
 export interface NavLink {
-  /** "#section" for in-page anchors, "/path" for page routes */
-  href: string;
+  /** "#section" for in-page anchors, "/path" for page routes; omit when children present */
+  href?: string;
   label: string;
   /** mark page-route links as back navigation for the directional transition */
   back?: boolean;
+  /** dropdown group */
+  children?: { href: string; label: string }[];
 }
 
 /* ---------- brand mark ---------- */
@@ -76,8 +78,34 @@ export default function SiteNav({
   const { theme, toggleTheme } = useTheme();
   const [scrolled, setScrolled] = useState(false);
   const [active, setActive] = useState<string | null>(null);
+  const [openGroup, setOpenGroup] = useState<string | null>(null);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const listRef = useRef<HTMLElement>(null);
   const [bar, setBar] = useState<{ left: number; width: number } | null>(null);
+
+  /* close dropdown / mobile menu on outside pointer or Escape */
+  useEffect(() => {
+    if (!openGroup && !mobileOpen) return;
+    const onDown = (e: PointerEvent) => {
+      const header = (e.target as Element).closest("header");
+      if (!header) {
+        setOpenGroup(null);
+        setMobileOpen(false);
+      }
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setOpenGroup(null);
+        setMobileOpen(false);
+      }
+    };
+    document.addEventListener("pointerdown", onDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("pointerdown", onDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [openGroup, mobileOpen]);
 
   /* condensed nav after scroll */
   useEffect(() => {
@@ -88,7 +116,7 @@ export default function SiteNav({
   }, []);
 
   /* scrollspy over anchor targets */
-  const anchors = links.filter((l) => l.href.startsWith("#")).map((l) => l.href.slice(1));
+  const anchors = links.filter((l) => l.href?.startsWith("#")).map((l) => l.href!.slice(1));
   const anchorsKey = anchors.join(",");
   useEffect(() => {
     if (!anchors.length) return;
@@ -159,7 +187,46 @@ export default function SiteNav({
               style={bar ? { left: bar.left, width: bar.width, transitionTimingFunction: "cubic-bezier(0.3, 0.9, 0.3, 1)" } : { left: 0, width: 0 }}
             />
             {links.map((l) =>
-              l.href.startsWith("#") ? (
+              l.children ? (
+                <div key={l.label} className="relative">
+                  <button
+                    onClick={() => setOpenGroup(openGroup === l.label ? null : l.label)}
+                    className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 transition-colors duration-300 hover:text-accent ${
+                      openGroup === l.label ? "text-accent" : ""
+                    }`}
+                  >
+                    {l.label}
+                    <svg
+                      className={`transition-transform duration-200 ${openGroup === l.label ? "rotate-180" : ""}`}
+                      width="12"
+                      height="12"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="m6 9 6 6 6-6" />
+                    </svg>
+                  </button>
+                  {openGroup === l.label && (
+                    <div className="absolute start-0 top-full z-30 mt-2 min-w-52 rounded-lg border border-line bg-ink-850 py-1.5 shadow-[0_16px_40px_rgba(4,11,28,0.5)]">
+                      {l.children.map((c) => (
+                        <Link
+                          key={c.href}
+                          href={c.href}
+                          transitionTypes={["nav-forward"]}
+                          onClick={() => setOpenGroup(null)}
+                          className="block px-4 py-2.5 text-sm text-foreground/75 transition-colors duration-150 hover:bg-ink-800 hover:text-accent"
+                        >
+                          {c.label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ) : l.href!.startsWith("#") ? (
                 <a
                   key={l.href}
                   href={l.href}
@@ -173,7 +240,7 @@ export default function SiteNav({
               ) : (
                 <Link
                   key={l.href}
-                  href={l.href}
+                  href={l.href!}
                   transitionTypes={[l.back ? "nav-back" : "nav-forward"]}
                   className="rounded-md px-3 py-1.5 transition-colors duration-300 hover:text-accent"
                 >
@@ -184,6 +251,24 @@ export default function SiteNav({
           </nav>
 
           <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+            {links.length > 0 && (
+              <button
+                onClick={() => setMobileOpen((v) => !v)}
+                aria-label="Menu"
+                aria-expanded={mobileOpen}
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-line text-foreground/70 transition hover:border-accent/50 hover:text-accent md:hidden"
+              >
+                {mobileOpen ? (
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
+                    <path d="M6 6l12 12M18 6 6 18" />
+                  </svg>
+                ) : (
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
+                    <path d="M4 7h16M4 12h16M4 17h16" />
+                  </svg>
+                )}
+              </button>
+            )}
             <button
               onClick={toggleTheme}
               aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
@@ -240,6 +325,63 @@ export default function SiteNav({
               ))}
           </div>
         </div>
+
+        {/* mobile menu */}
+        {mobileOpen && links.length > 0 && (
+          <div className="border-t border-line bg-ink-950/95 backdrop-blur-xl md:hidden">
+            <nav className="mx-auto max-w-6xl space-y-1 px-4 py-4">
+              {links.map((l) =>
+                l.children ? (
+                  <div key={l.label} className="pb-1">
+                    <div className="latin px-3 pb-1.5 pt-2 font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/40">
+                      {l.label}
+                    </div>
+                    {l.children.map((c) => (
+                      <Link
+                        key={c.href}
+                        href={c.href}
+                        transitionTypes={["nav-forward"]}
+                        onClick={() => setMobileOpen(false)}
+                        className="block rounded-md px-3 py-2.5 text-sm text-foreground/80 transition-colors hover:bg-ink-900 hover:text-accent"
+                      >
+                        {c.label}
+                      </Link>
+                    ))}
+                  </div>
+                ) : l.href!.startsWith("#") ? (
+                  <a
+                    key={l.href}
+                    href={l.href}
+                    onClick={() => setMobileOpen(false)}
+                    className="block rounded-md px-3 py-2.5 text-sm text-foreground/80 transition-colors hover:bg-ink-900 hover:text-accent"
+                  >
+                    {l.label}
+                  </a>
+                ) : (
+                  <Link
+                    key={l.href}
+                    href={l.href!}
+                    transitionTypes={["nav-forward"]}
+                    onClick={() => setMobileOpen(false)}
+                    className="block rounded-md px-3 py-2.5 text-sm text-foreground/80 transition-colors hover:bg-ink-900 hover:text-accent"
+                  >
+                    {l.label}
+                  </Link>
+                )
+              )}
+              {cta && !cta.href.startsWith("#") && (
+                <Link
+                  href={cta.href}
+                  transitionTypes={[cta.back ? "nav-back" : "nav-forward"]}
+                  onClick={() => setMobileOpen(false)}
+                  className="mt-2 block rounded-lg bg-brand px-3 py-2.5 text-center text-sm font-semibold text-white"
+                >
+                  {cta.label}
+                </Link>
+              )}
+            </nav>
+          </div>
+        )}
       </header>
     </ViewTransition>
   );
