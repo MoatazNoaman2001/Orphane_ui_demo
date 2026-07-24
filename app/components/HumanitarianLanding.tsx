@@ -90,7 +90,7 @@ export default function HumanitarianLanding() {
       >
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-4 sm:px-5">
           <a href="#top" className="flex min-w-0 items-center gap-2.5">
-            <Mark size={32} />
+            <Mark size={36} />
             <span className="min-w-0">
               <span className="block truncate text-sm font-bold" style={{ color: C.ink }}>
                 {lang === "ar" ? "مرصد بيانات الأيتام" : "Orphan Data Observatory"}
@@ -372,7 +372,7 @@ export default function HumanitarianLanding() {
         <div className="mx-auto grid max-w-6xl gap-8 px-5 py-12 sm:grid-cols-[1.4fr_1fr]">
           <div>
             <div className="flex items-center gap-2.5">
-              <Mark size={28} />
+              <Mark size={32} />
               <span className="text-sm font-bold text-white">
                 {lang === "ar" ? "مرصد بيانات الأيتام" : "Orphan Data Observatory"}
               </span>

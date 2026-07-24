@@ -15,7 +15,7 @@ export interface NavLink {
 }
 
 /* ---------- brand mark — the official Observatory logo ---------- */
-export function Mark({ size = 34 }: { size?: number }) {
+export function Mark({ size = 38 }: { size?: number }) {
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
@@ -394,7 +394,7 @@ function BrandBlock({ title, subtitle, scrolled }: { title: string; subtitle: st
   return (
     <>
       <span className="shrink-0 transition-transform duration-500 group-hover:rotate-[30deg]">
-        <Mark size={scrolled ? 30 : 34} />
+        <Mark size={scrolled ? 34 : 38} />
       </span>
       <span className="min-w-0 leading-tight">
         <span className="block truncate text-sm font-semibold tracking-wide">{title}</span>

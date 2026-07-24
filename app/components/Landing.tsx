@@ -592,7 +592,7 @@ export default function Landing() {
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             <div>
               <div className="flex items-center gap-2.5">
-                <Mark size={26} />
+                <Mark size={30} />
                 <span className="text-sm font-semibold">{t.hero.kicker}</span>
               </div>
               <p className="mt-3 text-xs leading-relaxed text-foreground/50">{footerCols.mission}</p>
