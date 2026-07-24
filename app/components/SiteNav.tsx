@@ -29,32 +29,6 @@ export function Mark({ size = 38 }: { size?: number }) {
   );
 }
 
-/* ---------- scroll progress bar ---------- */
-function ScrollProgress() {
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const onScroll = () => {
-      const el = ref.current;
-      if (!el) return;
-      const h = document.documentElement;
-      const p = h.scrollTop / (h.scrollHeight - h.clientHeight || 1);
-      el.style.transform = `scaleX(${p})`;
-    };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-  return (
-    <div className="pointer-events-none fixed inset-x-0 top-0 z-[60] h-[2.5px] bg-line-soft">
-      <div
-        ref={ref}
-        className="h-full origin-left bg-accent rtl:origin-right"
-        style={{ transform: "scaleX(0)" }}
-      />
-    </div>
-  );
-}
-
 /*
  * Site navigation, shared by every observatory demo page.
  *
@@ -154,21 +128,16 @@ export default function SiteNav({
   return (
     <ViewTransition name="site-nav">
       <header
-        className={`fixed inset-x-0 top-0 z-50 border-b transition-all duration-500 ${
-          scrolled
-            ? "border-line bg-ink-950/85 shadow-[0_8px_30px_rgba(4,11,28,0.35)] backdrop-blur-xl"
-            : "border-transparent bg-ink-950/40 backdrop-blur-md"
+        className={`fixed inset-x-0 top-0 z-50 border-b backdrop-blur-md transition-colors duration-300 ${
+          scrolled ? "border-line bg-ink-950/90" : "border-transparent bg-ink-950/60"
         }`}
       >
-        <ScrollProgress />
         <div
-          className={`mx-auto flex max-w-6xl items-center justify-between gap-2 px-4 transition-all duration-500 sm:gap-4 sm:px-5 ${
-            scrolled ? "h-14" : "h-16"
-          }`}
+          className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-2 px-4 sm:gap-4 sm:px-5"
         >
           {homeHref.startsWith("#") ? (
             <a href={homeHref} className="group flex min-w-0 flex-1 items-center gap-2.5 sm:flex-initial sm:gap-3">
-              <BrandBlock title={title} subtitle={subtitle} scrolled={scrolled} />
+              <BrandBlock title={title} subtitle={subtitle} />
             </a>
           ) : (
             <Link
@@ -176,7 +145,7 @@ export default function SiteNav({
               transitionTypes={["nav-back"]}
               className="group flex min-w-0 flex-1 items-center gap-2.5 sm:flex-initial sm:gap-3"
             >
-              <BrandBlock title={title} subtitle={subtitle} scrolled={scrolled} />
+              <BrandBlock title={title} subtitle={subtitle} />
             </Link>
           )}
 
@@ -390,11 +359,11 @@ export default function SiteNav({
   );
 }
 
-function BrandBlock({ title, subtitle, scrolled }: { title: string; subtitle: string; scrolled: boolean }) {
+function BrandBlock({ title, subtitle }: { title: string; subtitle: string }) {
   return (
     <>
       <span className="shrink-0 transition-transform duration-500 group-hover:rotate-[30deg]">
-        <Mark size={scrolled ? 34 : 38} />
+        <Mark size={38} />
       </span>
       <span className="min-w-0 leading-tight">
         <span className="block truncate text-sm font-semibold tracking-wide">{title}</span>
