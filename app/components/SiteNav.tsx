@@ -14,15 +14,18 @@ export interface NavLink {
   children?: { href: string; label: string }[];
 }
 
-/* ---------- brand mark ---------- */
+/* ---------- brand mark — the official Observatory logo ---------- */
 export function Mark({ size = 34 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 40 40" fill="none" aria-hidden="true">
-      <circle cx="20" cy="20" r="17" stroke="#1c4791" strokeWidth="2.5" />
-      <circle cx="20" cy="20" r="10.5" stroke="#1fc2f2" strokeWidth="2" strokeDasharray="4 5" />
-      <circle cx="20" cy="20" r="4" fill="#1fc2f2" />
-      <circle cx="31.5" cy="11" r="2.6" fill="#1c4791" stroke="#1fc2f2" strokeWidth="1.4" />
-    </svg>
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src="/logo.png"
+      width={size}
+      height={size}
+      alt=""
+      aria-hidden="true"
+      className="shrink-0 object-contain"
+    />
   );
 }
 
