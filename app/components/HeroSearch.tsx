@@ -128,7 +128,7 @@ export default function HeroSearch({
       />
 
       {open && query.trim().length >= 2 && (
-        <div className="absolute inset-x-0 top-full z-40 mt-2 max-h-80 overflow-auto rounded-xl border border-line bg-ink-850 py-2 shadow-[0_20px_50px_rgba(4,11,28,0.55)]">
+        <div className="pop-panel absolute inset-x-0 top-full z-40 mt-2.5 max-h-80 overflow-auto rounded-xl border border-line bg-ink-850/95 p-1.5 shadow-[0_20px_50px_rgba(4,11,28,0.4)] backdrop-blur-md">
           {grouped.length === 0 && <div className="px-4 py-4 text-sm text-foreground/45">{noResults}</div>}
           {grouped.map(([group, items]) => (
             <div key={group}>
@@ -142,7 +142,7 @@ export default function HeroSearch({
                     setOpen(false);
                     router.push(h.href);
                   }}
-                  className="flex w-full items-center justify-between gap-3 px-4 py-2.5 text-start text-sm text-foreground/80 transition-colors duration-150 hover:bg-ink-800 hover:text-accent"
+                  className="flex w-full items-center justify-between gap-3 rounded-lg px-3.5 py-2.5 text-start text-sm text-foreground/80 transition-colors duration-150 hover:bg-ink-800 hover:text-accent"
                 >
                   <span className="min-w-0 truncate">{h.label}</span>
                   <span className="latin shrink-0 font-mono text-[10px] text-foreground/40">{h.sub}</span>

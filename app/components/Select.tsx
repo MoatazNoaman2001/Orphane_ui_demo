@@ -78,7 +78,7 @@ export default function Select({
       {open && (
         <ul
           role="listbox"
-          className="absolute inset-x-0 top-full z-30 mt-1.5 max-h-64 overflow-auto rounded-lg border border-line bg-ink-850 py-1 shadow-[0_16px_40px_rgba(4,11,28,0.5)]"
+          className="pop-panel absolute inset-x-0 top-full z-30 mt-2 max-h-64 overflow-auto rounded-xl border border-line bg-ink-850/95 p-1.5 shadow-[0_16px_40px_rgba(4,11,28,0.35)] backdrop-blur-md"
         >
           {options.map((o) => {
             const isSelected = o.value === value;
@@ -92,7 +92,7 @@ export default function Select({
                     onChange(o.value);
                     setOpen(false);
                   }}
-                  className={`flex w-full items-center justify-between gap-2 px-3 py-2.5 text-start text-sm transition-colors duration-150 ${
+                  className={`flex w-full items-center justify-between gap-2 rounded-lg px-3 py-2.5 text-start text-sm transition-colors duration-150 ${
                     isSelected ? "bg-accent/10 text-accent" : "text-foreground/80 hover:bg-ink-800 hover:text-foreground"
                   }`}
                 >

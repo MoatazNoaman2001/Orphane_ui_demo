@@ -183,14 +183,14 @@ export default function SiteNav({
                     </svg>
                   </button>
                   {openGroup === l.label && (
-                    <div className="absolute start-0 top-full z-30 mt-2 min-w-52 rounded-lg border border-line bg-ink-850 py-1.5 shadow-[0_16px_40px_rgba(4,11,28,0.5)]">
+                    <div className="pop-panel absolute start-0 top-full z-30 mt-2.5 min-w-56 overflow-hidden rounded-xl border border-line bg-ink-850/95 p-1.5 shadow-[0_16px_40px_rgba(4,11,28,0.35)] backdrop-blur-md">
                       {l.children.map((c) => (
                         <Link
                           key={c.href}
                           href={c.href}
                           transitionTypes={["nav-forward"]}
                           onClick={() => setOpenGroup(null)}
-                          className="block px-4 py-2.5 text-sm text-foreground/75 transition-colors duration-150 hover:bg-ink-800 hover:text-accent"
+                          className="block rounded-lg px-3.5 py-2.5 text-sm text-foreground/75 transition-colors duration-150 hover:bg-ink-800 hover:text-accent"
                         >
                           {c.label}
                         </Link>
@@ -300,7 +300,7 @@ export default function SiteNav({
 
         {/* mobile menu */}
         {mobileOpen && links.length > 0 && (
-          <div className="border-t border-line bg-ink-950/95 backdrop-blur-xl md:hidden">
+          <div className="pop-panel border-t border-line bg-ink-950/95 backdrop-blur-xl md:hidden">
             <nav className="mx-auto max-w-6xl space-y-1 px-4 py-4">
               {links.map((l) =>
                 l.children ? (
