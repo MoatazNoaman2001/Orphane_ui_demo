@@ -25,7 +25,9 @@ export function Reveal({
           io.disconnect();
         }
       },
-      { threshold: 0.15 }
+      // threshold 0: tall elements (long tables) can never reach a fractional
+      // visibility threshold, which would keep them permanently hidden
+      { threshold: 0, rootMargin: "0px 0px -40px 0px" }
     );
     io.observe(el);
     return () => io.disconnect();
