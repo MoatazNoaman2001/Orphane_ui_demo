@@ -16,6 +16,24 @@ export interface Dict {
     firstRelease: string;
   };
   stats: { value: string; label: string; chip: string }[];
+  search: {
+    placeholder: string;
+    groups: { countries: string; indicators: string; sources: string; reports: string };
+    noResults: string;
+  };
+  domains: {
+    no: string;
+    title: string;
+    lead: string;
+    items: string[];
+    cta: string;
+  };
+  partnership: {
+    title: string;
+    sub: string;
+    contactCta: string;
+    loginCta: string;
+  };
   offer: {
     title: string;
     lead: string;
@@ -99,11 +117,29 @@ export const content: Record<Lang, Dict> = {
       firstRelease: "First Release · 2026",
     },
     stats: [
-      { value: "193", label: "countries in scope", chip: "18 REGIONS" },
-      { value: "80", label: "country files prepared", chip: "BATCH 01" },
-      { value: "151", label: "indicators tracked", chip: "5 DATA TYPES" },
-      { value: "363", label: "documented sources", chip: "GRADED A–E" },
+      { value: "199", label: "countries & entities in scope", chip: "193 UN + SCOPES" },
+      { value: "2,602", label: "indicator records prepared", chip: "UNDER REVIEW" },
+      { value: "361", label: "documented sources", chip: "GRADED A–E" },
+      { value: "07/2026", label: "latest data update", chip: "LIVE FROM DB" },
     ],
+    search: {
+      placeholder: "Search for a country, indicator, source, or report…",
+      groups: { countries: "Countries", indicators: "Indicators", sources: "Sources", reports: "Reports" },
+      noResults: "No results — try a country or indicator name.",
+    },
+    domains: {
+      no: "§02",
+      title: "Five data domains — kept apart",
+      lead: "Every figure belongs to exactly one domain; they are never mixed or totalled together.",
+      items: ["Need", "Coverage", "Sponsorship", "Care quality", "Institutional capacity"],
+      cta: "Open the indicators dashboard",
+    },
+    partnership: {
+      title: "Does your organization work with orphans?",
+      sub: "Contribute your aggregated figures through a private portal — reviewed, protected, and credited the way you choose. No personal data, ever.",
+      contactCta: "Request partnership",
+      loginCta: "Partner login",
+    },
     offer: {
       title: "What the Observatory offers",
       lead: "One platform, serving everyone who works for orphans — each with their own door in.",
@@ -157,7 +193,7 @@ export const content: Record<Lang, Dict> = {
       { text: "MA · Audit trail · 0 UNTRACED CHANGES", tone: "ok" },
     ],
     rule: {
-      no: "§01",
+      no: "§04",
       title: "The founding rule",
       lead: "Nothing enters the Observatory as a bare number. Each figure carries an identity card — its source, its year, its confidence grade. Remove any one of them, and the system refuses to save it.",
       cardTitle: "INDICATOR IDENTITY CARD",
@@ -178,7 +214,7 @@ export const content: Record<Lang, Dict> = {
       ],
     },
     pipeline: {
-      no: "§02",
+      no: "§05",
       title: "No number goes public unreviewed",
       lead: "Partners submit through a restricted portal. The Federation triages, reviews methodology, requests edits, classifies confidence, and approves — only then does anything publish.",
       steps: [
@@ -194,7 +230,7 @@ export const content: Record<Lang, Dict> = {
       cta: "Open the review screen",
     },
     countries: {
-      no: "§03",
+      no: "§01",
       title: "Countries tell the truth about their data",
       lead: "Every country page uses one unified template with an honest status — including admitting when the data simply isn't there yet.",
       states: [
@@ -208,7 +244,7 @@ export const content: Record<Lang, Dict> = {
       ctaList: "Browse all countries & map",
     },
     platform: {
-      no: "§04",
+      no: "§03",
       title: "One platform, both directions",
       lead: "A public observatory for the world. A governed portal for partners. The Federation stands between them.",
       features: [
@@ -260,11 +296,29 @@ export const content: Record<Lang, Dict> = {
       firstRelease: "الإصدار الأول · ٢٠٢٦",
     },
     stats: [
-      { value: "193", label: "دولة ضمن النطاق", chip: "18 إقليمًا" },
-      { value: "80", label: "ملفًا قُطريًا جاهزًا", chip: "الدفعة 01" },
-      { value: "151", label: "مؤشرًا مُتابَعًا", chip: "5 أنواع بيانات" },
-      { value: "363", label: "مصدرًا موثّقًا", chip: "مصنّفة A–E" },
+      { value: "199", label: "دولة وكيانًا ضمن النطاق", chip: "193 أممية + نطاقات" },
+      { value: "2,602", label: "سجل مؤشرات مُجهّز", chip: "قيد المراجعة" },
+      { value: "361", label: "مصدرًا موثّقًا", chip: "مصنّفة A–E" },
+      { value: "07/2026", label: "آخر تحديث للبيانات", chip: "تلقائيًا من القاعدة" },
     ],
+    search: {
+      placeholder: "ابحث عن دولة أو مؤشر أو مصدر أو تقرير…",
+      groups: { countries: "الدول", indicators: "المؤشرات", sources: "المصادر", reports: "التقارير" },
+      noResults: "لا نتائج — جرّب اسم دولة أو مؤشر.",
+    },
+    domains: {
+      no: "§٠٢",
+      title: "خمسة مجالات للبيانات — تُفصل ولا تُخلط",
+      lead: "كل رقم ينتمي لمجال واحد بالضبط، ولا تُخلط المجالات أو تُجمع معًا أبدًا.",
+      items: ["الاحتياج", "التغطية", "الكفالة", "جودة الرعاية", "القدرة المؤسسية"],
+      cta: "افتح لوحة المؤشرات",
+    },
+    partnership: {
+      title: "هل تعمل مؤسستك مع الأيتام؟",
+      sub: "ساهموا بأرقامكم المجمّعة عبر بوابة خاصة — تُراجع وتُحمى ويُنسب الفضل كما تختارون. ولا بيانات شخصية أبدًا.",
+      contactCta: "اطلب الشراكة",
+      loginCta: "دخول الشركاء",
+    },
     offer: {
       title: "ماذا يقدّم المرصد",
       lead: "منصة واحدة تخدم كل من يعمل لأجل الأيتام — ولكلٍّ بابه الخاص.",
@@ -318,7 +372,7 @@ export const content: Record<Lang, Dict> = {
       { text: "المغرب · سجل التدقيق · صفر تغييرات دون أثر", tone: "ok" },
     ],
     rule: {
-      no: "§٠١",
+      no: "§٠٤",
       title: "القاعدة التأسيسية",
       lead: "لا يدخل المرصدَ رقمٌ مجرّد. كل رقمٍ يحمل بطاقة هوية — مصدره، وسنته، ودرجة ثقته. انزع أيًّا منها، ويرفض النظام حفظه.",
       cardTitle: "بطاقة هوية المؤشر",
@@ -339,7 +393,7 @@ export const content: Record<Lang, Dict> = {
       ],
     },
     pipeline: {
-      no: "§٠٢",
+      no: "§٠٥",
       title: "لا رقم يُنشَر دون مراجعة",
       lead: "يقدّم الشركاء بياناتهم عبر بوابة مقيَّدة. يفرز الاتحاد، ويراجع المنهجية، ويطلب التعديلات، ويصنّف الثقة، ثم يعتمد — وعندها فقط يُنشَر أي شيء.",
       steps: [
@@ -355,7 +409,7 @@ export const content: Record<Lang, Dict> = {
       cta: "افتح شاشة المراجعة",
     },
     countries: {
-      no: "§٠٣",
+      no: "§٠١",
       title: "الدول تقول الحقيقة عن بياناتها",
       lead: "كل صفحة دولة تستخدم قالبًا موحّدًا بحالةٍ صادقة — بما في ذلك الاعتراف حين لا تتوفر البيانات بعد.",
       states: [
@@ -369,7 +423,7 @@ export const content: Record<Lang, Dict> = {
       ctaList: "تصفّح كل الدول والخريطة",
     },
     platform: {
-      no: "§٠٤",
+      no: "§٠٣",
       title: "منصة واحدة، في الاتجاهين",
       lead: "مرصد عام للعالم. بوابة محوكمة للشركاء. والاتحاد يقف بينهما.",
       features: [

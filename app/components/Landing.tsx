@@ -8,7 +8,8 @@ import SiteNav, { Mark } from "./SiteNav";
 import { GRADE_COLORS, Reveal, Scramble, SpotCard, TONE_COLORS, tint } from "./motion";
 import { useLang, useTheme } from "./prefs";
 import { content } from "../content";
-import { portalCta, publicNav } from "../nav-public";
+import { portalCta, publicFooter, publicNav } from "../nav-public";
+import HeroSearch from "./HeroSearch";
 
 /* ---------- feature icons ---------- */
 function FeatureIcon({ i }: { i: number }) {
@@ -31,6 +32,7 @@ export default function Landing() {
   const { lang } = useLang();
   const { theme } = useTheme();
   const t = content[lang];
+  const footerCols = publicFooter(lang);
 
   const [chips, setChips] = useState({ source: false, year: false, grade: false });
   const valid = chips.source && chips.year && chips.grade;
@@ -108,10 +110,20 @@ export default function Landing() {
                 {t.hero.sub}
               </p>
             </Reveal>
-            <Reveal delay={240}>
-              <div className="mt-8 flex flex-wrap items-center gap-4">
+            <Reveal delay={220}>
+              <div className="mt-7">
+                <HeroSearch
+                  lang={lang}
+                  placeholder={t.search.placeholder}
+                  groups={t.search.groups}
+                  noResults={t.search.noResults}
+                />
+              </div>
+            </Reveal>
+            <Reveal delay={300}>
+              <div className="mt-7 flex flex-wrap items-center gap-4">
                 <a
-                  href="#rule"
+                  href="#countries"
                   className="rounded-full bg-accent px-7 py-3 text-sm font-semibold text-on-accent shadow-[0_0_28px_rgba(31,194,242,0.4)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_48px_rgba(31,194,242,0.65)]"
                 >
                   {t.hero.ctaPrimary}
@@ -179,6 +191,169 @@ export default function Landing() {
           </div>
         </div>
       </div>
+
+      {/* ================= §03 COUNTRIES ================= */}
+      <section id="countries" className="relative scroll-mt-24 py-24">
+        <div className="mx-auto max-w-6xl px-5">
+          <Reveal>
+            <div className="latin font-mono text-sm tracking-[0.3em] text-accent">{t.countries.no}</div>
+            <h2 className="mt-3 max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl">{t.countries.title}</h2>
+            <p className="mt-4 max-w-2xl leading-relaxed text-foreground/65">{t.countries.lead}</p>
+          </Reveal>
+        </div>
+
+        {/* full-bleed dot-matrix world map — hover a glowing country for its status card */}
+        <Reveal delay={100}>
+          <div className="mt-12 w-full">
+            <WorldDotMap lang={lang} />
+          </div>
+        </Reveal>
+
+        <div className="mx-auto mt-16 grid max-w-6xl gap-5 px-5 sm:grid-cols-2 lg:grid-cols-4">
+          {t.countries.states.map((st, i) => {
+            const colors = ["var(--state-pub)", "var(--state-prep)", "var(--state-gap)", "var(--state-internal)"];
+            const c = colors[i];
+            return (
+              <Reveal key={i} delay={i * 100} className="h-full">
+                <SpotCard className="group h-full rounded-2xl border border-line bg-ink-900/50 p-6 backdrop-blur-sm transition duration-300 hover:-translate-y-1.5 hover:border-accent/40 hover:shadow-[0_10px_40px_rgba(28,71,145,0.35)]">
+                  <div
+                    className="latin inline-block rounded px-2 py-1 font-mono text-[10px] font-semibold tracking-[0.18em]"
+                    style={{ background: tint(c, 10), color: c, border: `1px solid ${tint(c, 27)}` }}
+                  >
+                    {st.tag}
+                  </div>
+                  <div className="mt-4 text-lg font-semibold">{st.name}</div>
+                  <p className="mt-2 text-sm leading-relaxed text-foreground/60">{st.desc}</p>
+                </SpotCard>
+              </Reveal>
+            );
+          })}
+        </div>
+
+        <Reveal delay={200}>
+          <p className="mt-12 text-center text-lg font-medium sm:text-xl">
+            <span className="shimmer-text">{t.countries.gapNote}</span>
+          </p>
+        </Reveal>
+
+        <Reveal delay={260}>
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+            <Link
+              href="/designs/observatory/countries"
+              transitionTypes={["nav-forward"]}
+              className="group inline-flex items-center gap-2.5 rounded-full border border-accent/40 bg-ink-900/40 px-7 py-3 text-sm font-semibold text-accent backdrop-blur-sm transition duration-300 hover:-translate-y-0.5 hover:bg-accent/10 hover:shadow-[0_0_32px_rgba(31,194,242,0.35)]"
+            >
+              {t.countries.ctaList}
+              <svg className="transition-transform duration-300 group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14m-6-6 6 6-6 6" />
+              </svg>
+            </Link>
+            <Link
+              href="/designs/observatory/country"
+              transitionTypes={["nav-forward"]}
+              className="group inline-flex items-center gap-2.5 rounded-full border border-line bg-ink-900/40 px-7 py-3 text-sm font-medium text-foreground/75 backdrop-blur-sm transition duration-300 hover:-translate-y-0.5 hover:border-accent/50 hover:text-accent"
+            >
+              {t.countries.cta}
+              <svg className="transition-transform duration-300 group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14m-6-6 6 6-6 6" />
+              </svg>
+            </Link>
+          </div>
+        </Reveal>
+      </section>
+
+      {/* ================= §02 DOMAINS ================= */}
+      <section className="border-t border-line">
+        <div className="mx-auto max-w-6xl px-5 py-20">
+          <Reveal>
+            <div className="latin font-mono text-sm tracking-[0.3em] text-accent">{t.domains.no}</div>
+            <h2 className="mt-3 max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl">{t.domains.title}</h2>
+            <p className="mt-4 max-w-2xl leading-relaxed text-foreground/65">{t.domains.lead}</p>
+          </Reveal>
+          <Reveal delay={100}>
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              {t.domains.items.map((d) => (
+                <span key={d} className="rounded-xl border border-line bg-ink-900/50 px-5 py-3 text-sm font-semibold text-foreground/80">
+                  {d}
+                </span>
+              ))}
+            </div>
+          </Reveal>
+          <Reveal delay={160}>
+            <Link
+              href="/designs/observatory/indicators"
+              transitionTypes={["nav-forward"]}
+              className="group mt-8 inline-flex items-center gap-2 text-sm font-semibold text-accent transition-all hover:gap-3"
+            >
+              {t.domains.cta}
+              <svg className="rtl:rotate-180" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14m-6-6 6 6-6 6" />
+              </svg>
+            </Link>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ================= LATEST ================= */}
+      <section className="border-t border-line">
+        <div className="mx-auto max-w-6xl px-5 py-24">
+          <Reveal>
+            <h2 className="max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl">{t.latest.title}</h2>
+            <p className="mt-4 max-w-2xl leading-relaxed text-foreground/65">{t.latest.lead}</p>
+          </Reveal>
+
+          <div className="mt-10 grid gap-5 md:grid-cols-3">
+            {t.latest.items.map((u, i) => (
+              <Reveal key={i} delay={i * 80} className="h-full">
+                <SpotCard className="flex h-full flex-col rounded-2xl border border-line bg-ink-900/50 p-6 backdrop-blur-sm transition-colors duration-300 hover:border-accent/40">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="rounded-full border border-accent/25 bg-accent/5 px-2.5 py-0.5 text-[11px] font-medium text-accent/90">
+                      {u.tag}
+                    </span>
+                    <span className="latin font-mono text-[11px] text-foreground/40">{u.date}</span>
+                  </div>
+                  <h3 className="mt-4 text-base font-semibold leading-snug">{u.title}</h3>
+                </SpotCard>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ================= §04 WHAT WE OFFER ================= */}
+      <section id="platform" className="scroll-mt-24 border-t border-line">
+        <div className="mx-auto max-w-6xl px-5 py-24">
+          <Reveal>
+            <div className="latin font-mono text-sm tracking-[0.3em] text-accent">{t.platform.no}</div>
+            <h2 className="mt-3 max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl">{t.offer.title}</h2>
+            <p className="mt-4 max-w-2xl leading-relaxed text-foreground/65">{t.offer.lead}</p>
+          </Reveal>
+
+          <div className="mt-12 grid gap-5 sm:grid-cols-2">
+            {t.offer.items.map((s, i) => (
+              <Reveal key={i} delay={(i % 2) * 80} className="h-full">
+                <SpotCard className="group flex h-full flex-col rounded-2xl border border-line bg-ink-900/50 p-7 backdrop-blur-sm transition-colors duration-300 hover:border-accent/40">
+                  <div className="inline-flex w-fit rounded-xl border border-accent/20 bg-accent/5 p-2.5 text-accent/80 transition duration-300 group-hover:border-accent/50 group-hover:text-accent">
+                    <FeatureIcon i={[2, 0, 3, 4][i]} />
+                  </div>
+                  <h3 className="mt-4 text-lg font-semibold">{s.audience}</h3>
+                  <p className="mt-2 flex-1 text-sm leading-relaxed text-foreground/60">{s.what}</p>
+                  <Link
+                    href={s.href}
+                    transitionTypes={["nav-forward"]}
+                    className="mt-4 inline-flex w-fit items-center gap-1.5 text-sm font-medium text-accent transition-all hover:gap-2.5"
+                  >
+                    {s.link}
+                    <svg className="rtl:rotate-180" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M5 12h14m-6-6 6 6-6 6" />
+                    </svg>
+                  </Link>
+                </SpotCard>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* ================= §01 THE RULE ================= */}
       <section id="rule" className="relative mx-auto max-w-6xl scroll-mt-24 px-5 py-24">
@@ -366,137 +541,6 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ================= §03 COUNTRIES ================= */}
-      <section id="countries" className="relative scroll-mt-24 py-24">
-        <div className="mx-auto max-w-6xl px-5">
-          <Reveal>
-            <div className="latin font-mono text-sm tracking-[0.3em] text-accent">{t.countries.no}</div>
-            <h2 className="mt-3 max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl">{t.countries.title}</h2>
-            <p className="mt-4 max-w-2xl leading-relaxed text-foreground/65">{t.countries.lead}</p>
-          </Reveal>
-        </div>
-
-        {/* full-bleed dot-matrix world map — hover a glowing country for its status card */}
-        <Reveal delay={100}>
-          <div className="mt-12 w-full">
-            <WorldDotMap lang={lang} />
-          </div>
-        </Reveal>
-
-        <div className="mx-auto mt-16 grid max-w-6xl gap-5 px-5 sm:grid-cols-2 lg:grid-cols-4">
-          {t.countries.states.map((st, i) => {
-            const colors = ["var(--state-pub)", "var(--state-prep)", "var(--state-gap)", "var(--state-internal)"];
-            const c = colors[i];
-            return (
-              <Reveal key={i} delay={i * 100} className="h-full">
-                <SpotCard className="group h-full rounded-2xl border border-line bg-ink-900/50 p-6 backdrop-blur-sm transition duration-300 hover:-translate-y-1.5 hover:border-accent/40 hover:shadow-[0_10px_40px_rgba(28,71,145,0.35)]">
-                  <div
-                    className="latin inline-block rounded px-2 py-1 font-mono text-[10px] font-semibold tracking-[0.18em]"
-                    style={{ background: tint(c, 10), color: c, border: `1px solid ${tint(c, 27)}` }}
-                  >
-                    {st.tag}
-                  </div>
-                  <div className="mt-4 text-lg font-semibold">{st.name}</div>
-                  <p className="mt-2 text-sm leading-relaxed text-foreground/60">{st.desc}</p>
-                </SpotCard>
-              </Reveal>
-            );
-          })}
-        </div>
-
-        <Reveal delay={200}>
-          <p className="mt-12 text-center text-lg font-medium sm:text-xl">
-            <span className="shimmer-text">{t.countries.gapNote}</span>
-          </p>
-        </Reveal>
-
-        <Reveal delay={260}>
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-            <Link
-              href="/designs/observatory/countries"
-              transitionTypes={["nav-forward"]}
-              className="group inline-flex items-center gap-2.5 rounded-full border border-accent/40 bg-ink-900/40 px-7 py-3 text-sm font-semibold text-accent backdrop-blur-sm transition duration-300 hover:-translate-y-0.5 hover:bg-accent/10 hover:shadow-[0_0_32px_rgba(31,194,242,0.35)]"
-            >
-              {t.countries.ctaList}
-              <svg className="transition-transform duration-300 group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M5 12h14m-6-6 6 6-6 6" />
-              </svg>
-            </Link>
-            <Link
-              href="/designs/observatory/country"
-              transitionTypes={["nav-forward"]}
-              className="group inline-flex items-center gap-2.5 rounded-full border border-line bg-ink-900/40 px-7 py-3 text-sm font-medium text-foreground/75 backdrop-blur-sm transition duration-300 hover:-translate-y-0.5 hover:border-accent/50 hover:text-accent"
-            >
-              {t.countries.cta}
-              <svg className="transition-transform duration-300 group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M5 12h14m-6-6 6 6-6 6" />
-              </svg>
-            </Link>
-          </div>
-        </Reveal>
-      </section>
-
-      {/* ================= §04 WHAT WE OFFER ================= */}
-      <section id="platform" className="scroll-mt-24 border-t border-line">
-        <div className="mx-auto max-w-6xl px-5 py-24">
-          <Reveal>
-            <div className="latin font-mono text-sm tracking-[0.3em] text-accent">{t.platform.no}</div>
-            <h2 className="mt-3 max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl">{t.offer.title}</h2>
-            <p className="mt-4 max-w-2xl leading-relaxed text-foreground/65">{t.offer.lead}</p>
-          </Reveal>
-
-          <div className="mt-12 grid gap-5 sm:grid-cols-2">
-            {t.offer.items.map((s, i) => (
-              <Reveal key={i} delay={(i % 2) * 80} className="h-full">
-                <SpotCard className="group flex h-full flex-col rounded-2xl border border-line bg-ink-900/50 p-7 backdrop-blur-sm transition-colors duration-300 hover:border-accent/40">
-                  <div className="inline-flex w-fit rounded-xl border border-accent/20 bg-accent/5 p-2.5 text-accent/80 transition duration-300 group-hover:border-accent/50 group-hover:text-accent">
-                    <FeatureIcon i={[2, 0, 3, 4][i]} />
-                  </div>
-                  <h3 className="mt-4 text-lg font-semibold">{s.audience}</h3>
-                  <p className="mt-2 flex-1 text-sm leading-relaxed text-foreground/60">{s.what}</p>
-                  <Link
-                    href={s.href}
-                    transitionTypes={["nav-forward"]}
-                    className="mt-4 inline-flex w-fit items-center gap-1.5 text-sm font-medium text-accent transition-all hover:gap-2.5"
-                  >
-                    {s.link}
-                    <svg className="rtl:rotate-180" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M5 12h14m-6-6 6 6-6 6" />
-                    </svg>
-                  </Link>
-                </SpotCard>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ================= LATEST ================= */}
-      <section className="border-t border-line">
-        <div className="mx-auto max-w-6xl px-5 py-24">
-          <Reveal>
-            <h2 className="max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl">{t.latest.title}</h2>
-            <p className="mt-4 max-w-2xl leading-relaxed text-foreground/65">{t.latest.lead}</p>
-          </Reveal>
-
-          <div className="mt-10 grid gap-5 md:grid-cols-3">
-            {t.latest.items.map((u, i) => (
-              <Reveal key={i} delay={i * 80} className="h-full">
-                <SpotCard className="flex h-full flex-col rounded-2xl border border-line bg-ink-900/50 p-6 backdrop-blur-sm transition-colors duration-300 hover:border-accent/40">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="rounded-full border border-accent/25 bg-accent/5 px-2.5 py-0.5 text-[11px] font-medium text-accent/90">
-                      {u.tag}
-                    </span>
-                    <span className="latin font-mono text-[11px] text-foreground/40">{u.date}</span>
-                  </div>
-                  <h3 className="mt-4 text-base font-semibold leading-snug">{u.title}</h3>
-                </SpotCard>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ================= GUARANTEES ================= */}
       <section className="border-t border-line">
         <div className="mx-auto max-w-6xl">
@@ -515,24 +559,28 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ================= CTA ================= */}
+      {/* ================= PARTNERSHIP ================= */}
       <section id="cta" className="relative scroll-mt-24 overflow-hidden border-t border-line">
-        <div className="relative mx-auto max-w-3xl px-5 py-28 text-center">
+        <div className="relative mx-auto max-w-3xl px-5 py-24 text-center">
           <Reveal>
             <Mark size={52} />
-            <h2 className="mt-8 text-3xl font-bold tracking-tight sm:text-4xl">{t.cta.title}</h2>
-            <p className="mx-auto mt-4 max-w-xl leading-relaxed text-foreground/65">{t.cta.sub}</p>
+            <h2 className="mt-8 text-3xl font-bold tracking-tight sm:text-4xl">{t.partnership.title}</h2>
+            <p className="mx-auto mt-4 max-w-xl leading-relaxed text-foreground/65">{t.partnership.sub}</p>
             <div className="mt-9 flex flex-wrap items-center justify-center gap-4">
+              <Link
+                href="/designs/observatory/contact?topic=3"
+                transitionTypes={["nav-forward"]}
+                className="rounded-full bg-accent px-8 py-3.5 text-sm font-semibold text-on-accent shadow-[0_0_28px_rgba(31,194,242,0.4)] transition duration-300 hover:-translate-y-0.5"
+              >
+                {t.partnership.contactCta}
+              </Link>
               <Link
                 href="/designs/observatory/access"
                 transitionTypes={["nav-forward"]}
-                className="rounded-full bg-accent px-8 py-3.5 text-sm font-semibold text-on-accent shadow-[0_0_28px_rgba(31,194,242,0.4)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_50px_rgba(31,194,242,0.65)]"
+                className="rounded-full border border-line bg-ink-900/40 px-8 py-3.5 text-sm font-medium text-foreground/80 backdrop-blur-sm transition duration-300 hover:-translate-y-0.5 hover:border-accent/50 hover:text-accent"
               >
-                {t.cta.button}
+                {t.partnership.loginCta}
               </Link>
-              <span className="latin font-mono text-xs tracking-[0.18em] text-foreground/40">
-                {t.cta.secondary}
-              </span>
             </div>
           </Reveal>
         </div>
@@ -540,18 +588,37 @@ export default function Landing() {
 
       {/* ================= FOOTER ================= */}
       <footer className="border-t border-line">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-5 py-8 text-center sm:flex-row sm:text-start">
-          <div className="flex items-center gap-3">
-            <Mark size={26} />
+        <div className="mx-auto max-w-6xl px-5 py-10">
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             <div>
-              <div className="text-sm font-medium">{t.footer.tagline}</div>
-              <div className="text-xs text-foreground/45">
-                © 2026 {t.footer.rights} · {t.footer.bilingual}
+              <div className="flex items-center gap-2.5">
+                <Mark size={26} />
+                <span className="text-sm font-semibold">{t.hero.kicker}</span>
               </div>
+              <p className="mt-3 text-xs leading-relaxed text-foreground/50">{footerCols.mission}</p>
             </div>
+            {[footerCols.explore, footerCols.about, footerCols.legal].map((col) => (
+              <div key={col.title}>
+                <div className="latin font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/40">{col.title}</div>
+                <ul className="mt-3 space-y-2 text-sm">
+                  {col.links.map((l) => (
+                    <li key={l.href + l.label}>
+                      <Link href={l.href} transitionTypes={["nav-forward"]} className="text-foreground/60 transition-colors hover:text-accent">
+                        {l.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
-          <div className="latin max-w-full text-center font-mono text-[10px] leading-relaxed tracking-[0.18em] text-foreground/35 sm:text-start">
-            EVERY NUMBER · A SOURCE · A YEAR · A GRADE
+        </div>
+        <div className="border-t border-line-soft">
+          <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-5 py-5 text-center sm:flex-row sm:text-start">
+            <span className="text-xs text-foreground/40">© 2026 {footerCols.rights} · {t.footer.bilingual}</span>
+            <span className="latin max-w-full text-center font-mono text-[10px] leading-relaxed tracking-[0.18em] text-foreground/30 sm:text-start">
+              EVERY NUMBER · A SOURCE · A YEAR · A GRADE
+            </span>
           </div>
         </div>
       </footer>

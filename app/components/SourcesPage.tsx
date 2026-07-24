@@ -13,7 +13,7 @@ import { useLang } from "./prefs";
 
 type SourceType = "official" | "international" | "survey" | "partner" | "research";
 
-interface SourceRow {
+export interface SourceRow {
   code: string;
   name: string;
   publisher: string;
@@ -23,7 +23,7 @@ interface SourceRow {
   attribution?: "anonymous";
 }
 
-const SOURCES: SourceRow[] = [
+export const SOURCES: SourceRow[] = [
   { code: "SRC-007", name: "A Snapshot on Statistics on Children in Türkiye 2024", publisher: "TÜİK", type: "official", year: 2024, grade: "A" },
   { code: "SRC-008", name: "İstatistiklerle Çocuk — 2024", publisher: "TÜİK", type: "official", year: 2024, grade: "A" },
   { code: "SRC-101", name: "UNICEF/UNAIDS Orphanhood Estimates 2025", publisher: "UNICEF · UNAIDS", type: "international", year: 2025, grade: "A" },

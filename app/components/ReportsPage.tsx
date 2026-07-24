@@ -10,7 +10,7 @@ import { useLang } from "./prefs";
  * publishing a report here is itself a Federation decision.
  */
 
-interface ReportRow {
+export interface ReportRow {
   titleEn: string;
   titleAr: string;
   summaryEn: string;
@@ -21,7 +21,7 @@ interface ReportRow {
   size: string;
 }
 
-const REPORTS: ReportRow[] = [
+export const REPORTS: ReportRow[] = [
   {
     titleEn: "Orphan Data Observatory — First Release Overview",
     titleAr: "مرصد بيانات الأيتام — عرض الإصدار الأول",
